@@ -12,9 +12,9 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.services.ISourceProviderService;
 import org.jboss.reddeer.recorder.core.eclipse.generator.GenerateTestEclipse;
-import org.jboss.reddeer.recorder.core.event.RecorderEvent;
-import org.jboss.reddeer.recorder.core.listener.ListenerController;
+import org.jboss.reddeer.recorder.core.swt.event.RecorderEvent;
 import org.jboss.reddeer.recorder.core.swt.generator.GenerateTestSWT;
+import org.jboss.reddeer.recorder.core.swt.listener.ListenerController;
 
 public class StopRecordTest extends AbstractHandler {
 
@@ -36,11 +36,11 @@ public class StopRecordTest extends AbstractHandler {
 	}
 	
 	public void generate(List<RecorderEvent> events,String testName){
-		//GenerateTestSWT generateTest = new GenerateTestSWT();
-		//generateTest.generate(events,testName);
+		GenerateTestSWT generateTest = new GenerateTestSWT();
+		generateTest.generate(events,testName);
 		
-		GenerateTestEclipse gen = new GenerateTestEclipse();
-		gen.generate(events, testName);
+		//GenerateTestEclipse gen = new GenerateTestEclipse();
+		//gen.generate(events, testName);
 	}
 
 }

@@ -20,22 +20,22 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.TextEdit;
 
-import org.jboss.reddeer.recorder.core.event.ActiveEditorRecorderEvent;
-import org.jboss.reddeer.recorder.core.event.ButtonRecorderEvent;
-import org.jboss.reddeer.recorder.core.event.CTabFolderRecorderEvent;
-import org.jboss.reddeer.recorder.core.event.ComboRecorderEvent;
-import org.jboss.reddeer.recorder.core.event.ContextMenuRecorderEvent;
-import org.jboss.reddeer.recorder.core.event.HyperlinkRecorderEvent;
-import org.jboss.reddeer.recorder.core.event.LinkRecorderEvent;
-import org.jboss.reddeer.recorder.core.event.MenuRecorderEvent;
-import org.jboss.reddeer.recorder.core.event.RecorderEvent;
-import org.jboss.reddeer.recorder.core.event.ShellRecorderEvent;
-import org.jboss.reddeer.recorder.core.event.TabFolderRecorderEvent;
-import org.jboss.reddeer.recorder.core.event.TableRecorderEvent;
-import org.jboss.reddeer.recorder.core.event.TextRecorderEvent;
-import org.jboss.reddeer.recorder.core.event.ViewToolBarRecorderEvent;
-import org.jboss.reddeer.recorder.core.event.TreeRecorderEvent;
-import org.jboss.reddeer.recorder.core.event.WorkbenchToolBarRecorderEvent;
+import org.jboss.reddeer.recorder.core.swt.event.ActiveEditorRecorderEvent;
+import org.jboss.reddeer.recorder.core.swt.event.ButtonRecorderEvent;
+import org.jboss.reddeer.recorder.core.swt.event.CTabFolderRecorderEvent;
+import org.jboss.reddeer.recorder.core.swt.event.ComboRecorderEvent;
+import org.jboss.reddeer.recorder.core.swt.event.ContextMenuRecorderEvent;
+import org.jboss.reddeer.recorder.core.swt.event.HyperlinkRecorderEvent;
+import org.jboss.reddeer.recorder.core.swt.event.LinkRecorderEvent;
+import org.jboss.reddeer.recorder.core.swt.event.MenuRecorderEvent;
+import org.jboss.reddeer.recorder.core.swt.event.RecorderEvent;
+import org.jboss.reddeer.recorder.core.swt.event.ShellRecorderEvent;
+import org.jboss.reddeer.recorder.core.swt.event.TabFolderRecorderEvent;
+import org.jboss.reddeer.recorder.core.swt.event.TableRecorderEvent;
+import org.jboss.reddeer.recorder.core.swt.event.TextRecorderEvent;
+import org.jboss.reddeer.recorder.core.swt.event.TreeRecorderEvent;
+import org.jboss.reddeer.recorder.core.swt.event.ViewToolBarRecorderEvent;
+import org.jboss.reddeer.recorder.core.swt.event.WorkbenchToolBarRecorderEvent;
 import org.jboss.reddeer.recorder.core.util.ImportUtils;
 
 public class GenerateTestSWT {

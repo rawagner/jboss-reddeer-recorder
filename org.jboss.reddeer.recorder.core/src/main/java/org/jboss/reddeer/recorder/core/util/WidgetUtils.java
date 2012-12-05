@@ -18,8 +18,12 @@ import org.eclipse.ui.PlatformUI;
 
 public class WidgetUtils {
 	
-	
 	public static String getShellName(Widget w){
+		String defaultShell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().getText();
+		String currentShell = PlatformUI.getWorkbench().getDisplay().getActiveShell().getText();
+		if(defaultShell.equals(currentShell)){
+			return null;
+		}
 		return PlatformUI.getWorkbench().getDisplay().getActiveShell().getText();
 	}
 	

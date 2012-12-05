@@ -4,7 +4,7 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 import org.jboss.reddeer.recorder.core.action.RecordingState;
-import org.jboss.reddeer.recorder.core.listener.ListenerController;
+import org.jboss.reddeer.recorder.core.swt.listener.ListenerController;
 
 public class RecordTestWizard extends Wizard{
 

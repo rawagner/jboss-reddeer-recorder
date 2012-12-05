@@ -10,7 +10,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.services.ISourceProviderService;
-import org.jboss.reddeer.recorder.core.listener.ListenerController;
+import org.jboss.reddeer.recorder.core.swt.listener.ListenerController;
 import org.jboss.reddeer.recorder.core.wizard.RecordTestWizard;
 
 public class RecordTest extends AbstractHandler {

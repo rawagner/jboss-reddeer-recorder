@@ -2,13 +2,13 @@ package org.jboss.reddeer.recorder.core.eclipse.generator;
 
 import java.util.List;
 
-import org.jboss.reddeer.recorder.core.eclipse.ErrorLog;
-import org.jboss.reddeer.recorder.core.eclipse.PackageExplorer;
-import org.jboss.reddeer.recorder.core.eclipse.ShowView;
-import org.jboss.reddeer.recorder.core.event.ActiveEditorRecorderEvent;
-import org.jboss.reddeer.recorder.core.event.MenuRecorderEvent;
-import org.jboss.reddeer.recorder.core.event.RecorderEvent;
-import org.jboss.reddeer.recorder.core.event.ShellRecorderEvent;
+import org.jboss.reddeer.recorder.core.eclipse.shell.ShowView;
+import org.jboss.reddeer.recorder.core.eclipse.view.ErrorLog;
+import org.jboss.reddeer.recorder.core.eclipse.view.PackageExplorer;
+import org.jboss.reddeer.recorder.core.swt.event.ActiveEditorRecorderEvent;
+import org.jboss.reddeer.recorder.core.swt.event.MenuRecorderEvent;
+import org.jboss.reddeer.recorder.core.swt.event.RecorderEvent;
+import org.jboss.reddeer.recorder.core.swt.event.ShellRecorderEvent;
 import org.jboss.reddeer.recorder.core.util.EclipseUtils;
 
 public class GenerateTestEclipse {
