@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+ <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="org.jboss.reddeer.recorder.core.action.RecordTest"
+            id="org.jboss.reddeer.recorder.core.action.startRecord"
+            name="record">
+      </command>
+      <command
+            defaultHandler="org.jboss.reddeer.recorder.core.action.StopRecordTest"
+            id="org.jboss.reddeer.recorder.core.action.stopRecord"
+            name="stop record">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.ui.main.toolbar">
+         <toolbar
+               id="recorder.core.toolbar1">
+            <command
+                  commandId="org.jboss.reddeer.recorder.core.action.startRecord"
+                  icon="icons/record32.png"
+                  label="Record Test"
+                  style="push">
+                  <visibleWhen checkEnabled="false">
+              		<with variable="org.jboss.reddeer.recorder.core.action.RecordingState">
+                  	<equals value="stopped">
+                  	</equals>
+              	  </with>
+            	  </visibleWhen>
+            </command>
+            <command
+                  commandId="org.jboss.reddeer.recorder.core.action.stopRecord"
+                  icon="icons/stoprecord.png"
+                  label="Stop Recording Test"
+                  style="push">
+                  <visibleWhen checkEnabled="false">
+              		<with variable="org.jboss.reddeer.recorder.core.action.RecordingState">
+                  	<equals value="started">
+                  	</equals>
+              	  </with>
+            	  </visibleWhen>
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+   <extension point="org.eclipse.ui.services"> 
+   <sourceProvider provider="org.jboss.reddeer.recorder.core.action.RecordingState"> 
+      <variable 
+            name="org.jboss.reddeer.recorder.core.action.RecordingState" 
+            priorityLevel="workbench"> 
+      </variable> 
+   </sourceProvider> 
+</extension>
+
+</plugin>
