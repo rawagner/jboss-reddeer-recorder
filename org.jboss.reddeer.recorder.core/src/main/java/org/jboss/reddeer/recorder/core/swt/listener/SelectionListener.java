@@ -60,9 +60,9 @@ public class SelectionListener extends RecorderListener implements Listener{
 			Collections.reverse(parents);
 			String text = item.getText();
 			int index = WidgetUtils.getIndex(event.widget);
-			TreeRecorderEvent ev = new TreeRecorderEvent(text,index,parents, WidgetUtils.getShellName(event.widget),WidgetUtils.getViewName());
-
-			if(getEvents().get(getEvents().size()-1).equals(ev)){
+			TreeRecorderEvent ev = new TreeRecorderEvent(text,index,WidgetUtils.getSelectedTreeItemIndex((Tree)event.widget,parents),parents, WidgetUtils.getShellName(event.widget),WidgetUtils.getViewName(),WidgetUtils.treeHasDuplicatedItems((Tree)event.widget,parents));
+			
+			if(getEvents().size()>0 && getEvents().get(getEvents().size()-1).equals(ev)){
 				getEvents().remove(getEvents().size()-1);
 			}
 			getEvents().add(ev);

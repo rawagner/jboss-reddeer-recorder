@@ -9,7 +9,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
 
 import org.jboss.reddeer.recorder.core.swt.event.RecorderEvent;
 
@@ -27,6 +26,8 @@ public class ListenerController {
 	private DefaultSelectionListener defaultSelectionListener;
 	private ModifyListener modifyListener;
 	private HyperlinkListener hyperlinkListener;
+	private CloseListener closeListener;
+	
 
 	public ListenerController() {
 		workbenchListener = new WorkbenchListener(events, menus);
@@ -38,6 +39,7 @@ public class ListenerController {
 		defaultSelectionListener = new DefaultSelectionListener(events, menus);
 		modifyListener = new ModifyListener(events, menus);
 		hyperlinkListener = new HyperlinkListener(events, menus);
+		closeListener = new CloseListener(events, menus);
 	}
 
 	public List<RecorderEvent> getEvents() {
@@ -54,6 +56,7 @@ public class ListenerController {
 		display.removeFilter(SWT.DefaultSelection, defaultSelectionListener);
 		display.removeFilter(SWT.Modify, modifyListener);
 		display.removeFilter(SWT.MouseDown, hyperlinkListener);
+		display.removeFilter(SWT.Close, closeListener);
 
 	}
 
@@ -79,6 +82,7 @@ public class ListenerController {
 		display.addFilter(SWT.DefaultSelection, defaultSelectionListener);
 		display.addFilter(SWT.Modify, modifyListener);
 		display.addFilter(SWT.MouseDown, hyperlinkListener);
+		display.addFilter(SWT.Close, closeListener);
 
 	}
 

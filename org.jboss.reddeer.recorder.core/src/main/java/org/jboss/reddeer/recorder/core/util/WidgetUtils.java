@@ -1,7 +1,9 @@
 package org.jboss.reddeer.recorder.core.util;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -13,6 +15,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.PlatformUI;
 
@@ -38,6 +41,66 @@ public class WidgetUtils {
 		return null;
 	}
 	
+	public static boolean treeHasDuplicatedItems(Tree tree,List<String> parents){
+		int i = 0;
+		TreeItem[] items = tree.getItems();
+		while(i<parents.size()){
+			int itemsCount = tree.getItemCount();
+			int j = 0;
+			while(j<itemsCount){
+				if(items[j].getText().equals(parents.get(i))){
+					i++;
+					items = items[j].getItems();
+					break;
+				} else {
+					j++;
+				}
+			}
+			//throw new IllegalArgumentException("");
+		}
+		
+		Set<String> setOfTexts = new HashSet<String>();
+		for(TreeItem treeItem:items){
+			boolean added = setOfTexts.add(treeItem.getText());
+			if(!added){
+				return true;
+			}
+		}
+
+		return false;
+	}
+	
+	public static int getSelectedTreeItemIndex(Tree tree,List<String> parents){
+		
+		int i = 0;
+		TreeItem[] items = tree.getItems();
+		while(i<parents.size()){
+			int itemsCount = tree.getItemCount();
+			int j = 0;
+			while(j<itemsCount){
+				if(items[j].getText().equals(parents.get(i))){
+					i++;
+					items = items[j].getItems();
+					break;
+				} else {
+					j++;
+				}
+			}
+			//throw new IllegalArgumentException("");
+		}
+		
+		TreeItem selectedIt = tree.getSelection()[0];
+		int same=-1;
+		for(int x=0;x<items.length;x++){
+			if(items[x].getText().equals(selectedIt.getText())){
+				same++;
+			}
+			if(items[x].equals(selectedIt)){
+				return same;
+			}
+		}
+		return 0;
+	}
 	
 	public static String getLabel(Widget widget){
 		String label = null;

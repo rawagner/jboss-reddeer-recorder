@@ -34,7 +34,7 @@ public class DefaultSelectionListener extends RecorderListener implements Listen
 			Collections.reverse(parents);
 			String text = item.getText();
 			int index =WidgetUtils.getIndex(event.widget);
-			TreeRecorderEvent ev = new TreeRecorderEvent(text,index,parents, WidgetUtils.getShellName(event.widget),WidgetUtils.getViewName());
+			TreeRecorderEvent ev = new TreeRecorderEvent(text,index,WidgetUtils.getSelectedTreeItemIndex((Tree)event.widget,parents),parents, WidgetUtils.getShellName(event.widget),WidgetUtils.getViewName(),WidgetUtils.treeHasDuplicatedItems((Tree)event.widget,parents));
 
 			if(getEvents().get(getEvents().size()-1).equals(ev)){
 				getEvents().remove(getEvents().size()-1);

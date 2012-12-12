@@ -2,6 +2,7 @@ package org.jboss.reddeer.recorder.core.swt.event;
 
 import java.util.Set;
 
+import org.jboss.reddeer.recorder.core.util.ImportUtils;
 import org.jboss.reddeer.recorder.core.util.WidgetUtils;
 
 public class TabFolderRecorderEvent extends RecorderEvent{
@@ -19,7 +20,8 @@ public class TabFolderRecorderEvent extends RecorderEvent{
 	}
 	
 	public Set<String> start(StringBuilder testBuilder,RecorderEvent previousEvent) {
-		testBuilder.append("bot.tabItem(\"" + getText() + "\")");
+		testBuilder.append("new DefaultTabItem(\"" + getText() + "\")");
+		setOfImports.add(ImportUtils.DEFAULT_TAB_ITEM);
 		return setOfImports;
 	}
 

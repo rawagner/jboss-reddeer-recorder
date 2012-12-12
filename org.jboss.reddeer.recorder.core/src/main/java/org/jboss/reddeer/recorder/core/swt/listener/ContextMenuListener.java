@@ -45,7 +45,7 @@ public class ContextMenuListener extends RecorderListener implements Listener {
 				//}
 
 				ContextMenuRecorderEvent contextMenu = new ContextMenuRecorderEvent(widget,context_text);
-				TreeRecorderEvent ev = new TreeRecorderEvent(text,index,parents, WidgetUtils.getShellName(event.widget),WidgetUtils.getViewName());
+				TreeRecorderEvent ev = new TreeRecorderEvent(text,index,WidgetUtils.getSelectedTreeItemIndex((Tree)event.widget,parents),parents, WidgetUtils.getShellName(event.widget),WidgetUtils.getViewName(),WidgetUtils.treeHasDuplicatedItems((Tree)event.widget,parents));
 				getEvents().add(ev);
 				
 				getEvents().add(contextMenu);	

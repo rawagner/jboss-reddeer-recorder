@@ -28,8 +28,8 @@ public class WorkbenchListener extends RecorderListener implements IPartListener
 		
 	}
 
-	public void partClosed(IWorkbenchPartReference arg0) {
-		// TODO Auto-generated method stub
+	public void partClosed(IWorkbenchPartReference ref) {
+		System.out.println(ref.getTitle()+ " closed");
 		
 	}
 

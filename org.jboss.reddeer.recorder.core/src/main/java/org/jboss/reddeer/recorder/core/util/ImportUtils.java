@@ -23,14 +23,16 @@ public class ImportUtils {
 	public static final String LABELED_TEXT="import org.jboss.reddeer.swt.impl.text.LabeledText;";
 
 	public static final String DEFAULT_TEXT="import org.jboss.reddeer.swt.impl.text.DefaultText;";
-	public static final String DEFAULT_TREE_ITEM="import org.jboss.reddeer.swt.impl.tree.DefaultTreeItem;";
 	public static final String JUNIT_TEST="import org.junit.Test;";
 	
 	public static final String WORKBENCH_TOOLBAR_ITEM="import org.jboss.reddeer.swt.impl.toolbar.WorkbenchToolItem;";
 	public static final String VIEW_TOOLBAR_ITEM="import org.jboss.reddeer.swt.impl.toolbar.ViewToolItem;";
 	
 	public static final String DEFAULT_TABLE="import org.jboss.reddeer.swt.impl.table.DefaultTable;";
+	public static final String DEFAULT_TAB_ITEM="import org.jboss.reddeer.swt.impl.tab.DefaultTabItem;";
 
+	public static final String SHELL_TREE_ITEM="import org.jboss.reddeer.swt.impl.tree.ShellTreeItem;";
+	public static final String VIEW_TREE_ITEM="import org.jboss.reddeer.swt.impl.tree.ViewTreeItem;";
 
 
 

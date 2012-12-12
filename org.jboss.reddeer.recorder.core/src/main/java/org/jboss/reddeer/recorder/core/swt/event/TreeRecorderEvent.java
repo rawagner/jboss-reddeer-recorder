@@ -13,11 +13,16 @@ public class TreeRecorderEvent extends RecorderEvent {
 	private int index;
 	private List<String> parents;
 	private boolean reverseContextTreeHack = false;
+	private int itemIndex;
+	private boolean  hasDuplicates;
+	private boolean addedTreeIndex=false;
 	
-	public TreeRecorderEvent(String text,int index,List<String> parents, String shell, String view){
+	public TreeRecorderEvent(String text,int index,int itemIndex,List<String> parents, String shell, String view, boolean hasDuplicates){
 		this.text=text;
 		this.index=index;
 		this.parents=parents;
+		this.itemIndex=itemIndex;
+		this.hasDuplicates=hasDuplicates;
 		setShellName(shell);
 		setViewName(view);
 	}
@@ -40,23 +45,33 @@ public class TreeRecorderEvent extends RecorderEvent {
 			return setOfImports;
 		}
 		if(getShellName() != null){
+			setOfImports.add(ImportUtils.SHELL_TREE_ITEM);
 			if(index == 0){
 				testBuilder.append("new ShellTreeItem(");
 			} else {
 				testBuilder.append("new ShellTreeItem("+index+",");
+				addedTreeIndex=true;
 			}
 		} else{
+			setOfImports.add(ImportUtils.VIEW_TREE_ITEM);
 			if(index == 0){
 				testBuilder.append("new ViewTreeItem(");
 			} else {
 				testBuilder.append("new ViewTreeItem("+index+",");
+				addedTreeIndex=true;
+			}
+		}
+		if(itemIndex >0){
+			if(addedTreeIndex){
+				testBuilder.append(itemIndex + ",");
+			}else{
+				testBuilder.append("0,"+itemIndex + ",");
 			}
 		}
 		for (String p : getParents()) {
 			testBuilder.append("\"" + p + "\",");
 		}
 		testBuilder.append("\""+getText()+"\")");
-		setOfImports.add(ImportUtils.DEFAULT_TREE_ITEM);
 		return setOfImports;
 	}
 
@@ -81,6 +96,14 @@ public class TreeRecorderEvent extends RecorderEvent {
 
 	public int getIndex() {
 		return index;
+	}
+	
+	public int getItemIndex(){
+		return itemIndex;
+	}
+	
+	public boolean hasDuplicates(){
+		return hasDuplicates;
 	}
 
 	public boolean isReverseContextTreeHack() {
