@@ -12,6 +12,8 @@ public class ImportUtils {
 	public static final String DEFAULT_COMBO="import org.jboss.reddeer.swt.impl.combo.DefaultCombo;";
 	public static final String CONTEXT_MENU="import org.jboss.reddeer.swt.impl.menu.ContextMenu;";
 	public static final String SHELL_MENU="import org.jboss.reddeer.swt.impl.menu.ShellMenu;";
+	public static final String TOOLBAR_MENU="import org.jboss.reddeer.swt.impl.menu.ToolbarMenu;";
+
 	
 	public static final String WAIT_UNTIL="import org.jboss.reddeer.swt.wait.WaitUntil;";
 	public static final String WAIT_WHILE="import org.jboss.reddeer.swt.wait.WaitWhile;";

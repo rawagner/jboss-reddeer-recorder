@@ -14,6 +14,7 @@ public class MenuRecorderEvent extends RecorderEvent {
 	private List<String> path;
 	private String text;
 	private boolean reverseContextTreeHack = false;
+	private boolean viewMenu = false;
 	
 	public MenuRecorderEvent(String text,List<String> path){
 		this.text=text;
@@ -35,7 +36,14 @@ public class MenuRecorderEvent extends RecorderEvent {
 	}
 	
 	public Set<String> start(StringBuilder testBuilder, RecorderEvent previousEvent) {
-		if (previousEvent != null && previousEvent instanceof ContextMenuRecorderEvent){
+		if(viewMenu){
+			testBuilder.append("new ToolbarMenu(");
+			setOfImports.add(ImportUtils.TOOLBAR_MENU);
+			for(String parent: getPath()){
+				testBuilder.append("\""+parent+"\",");
+			}
+			testBuilder.append("\""+getText()+"\")");
+		} else if (previousEvent != null && previousEvent instanceof ContextMenuRecorderEvent){
 			if (((ContextMenuRecorderEvent) previousEvent).getWidget() instanceof TreeItem) {
 				testBuilder.append("new ContextMenu(");
 				setOfImports.add(ImportUtils.CONTEXT_MENU);
@@ -73,6 +81,16 @@ public class MenuRecorderEvent extends RecorderEvent {
 			pathConverted.add(WidgetUtils.convert(s));
 		}
 		return pathConverted;
+	}
+
+
+	public boolean isViewMenu() {
+		return viewMenu;
+	}
+
+
+	public void setViewMenu(boolean viewMenu) {
+		this.viewMenu = viewMenu;
 	}
 
 }

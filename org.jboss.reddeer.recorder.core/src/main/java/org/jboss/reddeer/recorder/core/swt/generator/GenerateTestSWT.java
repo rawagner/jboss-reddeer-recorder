@@ -40,6 +40,8 @@ import org.jboss.reddeer.recorder.core.util.ImportUtils;
 
 public class GenerateTestSWT {
 
+	public static final String VIEW_MENU="View Menu";
+	
 	public boolean reverseContextTreeHack = false;
 	private Set<String> setOfImports = new HashSet<String>();
 
@@ -59,8 +61,13 @@ public class GenerateTestSWT {
 				previousEvent = button;
 			} else if (e instanceof MenuRecorderEvent) {
 				MenuRecorderEvent menu = (MenuRecorderEvent) e;
-				boolean hack = endPrevious(testBuilder, menu, previousEvent);
-				menu.setReverseContextTreeHack(hack);
+				if(previousEvent instanceof ViewToolBarRecorderEvent &&
+						((ViewToolBarRecorderEvent)previousEvent).getTooltypText().equals(VIEW_MENU)){
+					menu.setViewMenu(true);
+				} else {
+					boolean hack = endPrevious(testBuilder, menu, previousEvent);
+					menu.setReverseContextTreeHack(hack);
+				}
 				Set<String> imports = menu.start(testBuilder, previousEvent);
 				setOfImports.addAll(imports);
 				previousEvent = menu;
@@ -96,8 +103,10 @@ public class GenerateTestSWT {
 			} else if (e instanceof ViewToolBarRecorderEvent) {
 				ViewToolBarRecorderEvent toolbar = (ViewToolBarRecorderEvent) e;
 				endPrevious(testBuilder, toolbar, previousEvent);
-				Set<String> imports = toolbar.start(testBuilder, previousEvent);
-				setOfImports.addAll(imports);
+				if(!toolbar.getTooltypText().equals(VIEW_MENU)){ //if it is not view menu
+					Set<String> imports = toolbar.start(testBuilder, previousEvent);
+					setOfImports.addAll(imports);
+				}
 				previousEvent = toolbar;
 			} else if (e instanceof WorkbenchToolBarRecorderEvent) {
 				WorkbenchToolBarRecorderEvent toolbar = (WorkbenchToolBarRecorderEvent) e;
