@@ -3,6 +3,9 @@ package org.jboss.reddeer.recorder.core.swt.listener;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IBundleGroup;
+import org.eclipse.core.runtime.IBundleGroupProvider;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.SWT;
@@ -11,6 +14,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IWorkbenchPage;
 
 import org.jboss.reddeer.recorder.core.swt.event.RecorderEvent;
+import org.osgi.framework.Bundle;
 
 public class ListenerController {
 
@@ -83,7 +87,6 @@ public class ListenerController {
 		display.addFilter(SWT.Modify, modifyListener);
 		display.addFilter(SWT.MouseDown, hyperlinkListener);
 		display.addFilter(SWT.Close, closeListener);
-
 	}
 
 }

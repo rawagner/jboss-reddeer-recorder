@@ -11,6 +11,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.services.ISourceProviderService;
 import org.jboss.reddeer.recorder.core.swt.listener.ListenerController;
+import org.jboss.reddeer.recorder.core.wizard.ChooseProjectWizard;
 import org.jboss.reddeer.recorder.core.wizard.RecordTestWizard;
 
 public class RecordTest extends AbstractHandler {
@@ -29,15 +30,17 @@ public class RecordTest extends AbstractHandler {
 				.getSourceProvider(RecordingState.MY_STATE);
 		recordingStateService.toggleRecording();
 		IWorkbench workbench = PlatformUI.getWorkbench();
-		IWorkbenchPage page = workbench.getActiveWorkbenchWindow()
-				.getActivePage();
+		IWorkbenchPage page = workbench.getActiveWorkbenchWindow().getActivePage();
 
 		controller = new ListenerController();
 		display = Display.getCurrent();
 
 		
+	//	WizardDialog wizardDialog = new WizardDialog(display.getActiveShell(), new ChooseProjectWizard());
+	//	wizardDialog.open();
 		
-		WizardDialog wizardDialog = new WizardDialog(display.getActiveShell(),
+		
+	WizardDialog wizardDialog = new WizardDialog(display.getActiveShell(),
 				new RecordTestWizard(display,controller,page,recordingStateService));
 		wizardDialog.open();
 		// controller.hookupJobListeners();

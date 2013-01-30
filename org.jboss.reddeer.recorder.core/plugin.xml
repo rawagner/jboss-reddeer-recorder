@@ -56,5 +56,17 @@
       </variable> 
    </sourceProvider> 
 </extension>
+ <extension
+         point="org.eclipse.swtbot.generator.botGeneratorSupport">
+      <generator
+            class="org.jboss.reddeer.swt.generator.framework.rules.RedDeerSWTGeneratorRules">
+      </generator>
+   </extension>
+    <extension
+         point="org.eclipse.swtbot.generator.botGeneratorSupport">
+      <generator
+            class="org.jboss.reddeer.eclipse.generator.framework.rules.RedDeerEclipseGeneratorRules">
+      </generator>
+   </extension>
 
 </plugin>

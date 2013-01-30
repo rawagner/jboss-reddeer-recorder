@@ -1,11 +1,15 @@
 package org.jboss.reddeer.recorder.core.wizard;
 
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -52,6 +56,28 @@ public class RecordTestWizardPage extends WizardPage {
 			}
 
 		});
+		/*
+		Button chooseProjectButton = new Button(container, SWT.PUSH);
+		chooseProjectButton.setText("Choose project");
+		chooseProjectButton.addMouseListener(new MouseListener() {
+			
+			public void mouseUp(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			public void mouseDown(MouseEvent arg0) {
+				WizardDialog dialog = new WizardDialog(container.getShell(), new ChooseProjectWizard());
+				dialog.open(); 
+			}
+			
+			public void mouseDoubleClick(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		*/
+		
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		text1.setLayoutData(gd);
 		// Required to avoid an error in the system

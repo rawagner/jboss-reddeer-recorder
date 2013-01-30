@@ -3,6 +3,7 @@ package org.jboss.reddeer.recorder.core.wizard;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.jboss.reddeer.recorder.core.action.RecordingState;
 import org.jboss.reddeer.recorder.core.swt.listener.ListenerController;
 
@@ -13,6 +14,8 @@ public class RecordTestWizard extends Wizard{
 	private IWorkbenchPage page;
 	private ListenerController controller;
 	private RecordingState recordingStateService;
+
+	protected WizardNewFileCreationPage pageTwo;
 	
 	public RecordTestWizard(Display display,ListenerController controller,IWorkbenchPage page,RecordingState recordingStateService){
 		super();
@@ -26,7 +29,9 @@ public class RecordTestWizard extends Wizard{
 	@Override
 	public void addPages() {
 	    pageOne = new RecordTestWizardPage(recordingStateService);
+	    pageTwo = new WizardNewFileCreationPage("abc", null);
 	    addPage(pageOne);
+	    //addPage(pageTwo);
 	}
 	
 	@Override
