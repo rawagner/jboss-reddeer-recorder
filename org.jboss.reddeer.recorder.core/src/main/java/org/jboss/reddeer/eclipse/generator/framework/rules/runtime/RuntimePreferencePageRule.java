@@ -1,4 +1,4 @@
-package org.jboss.reddeer.eclipse.generator.framework.rules;
+package org.jboss.reddeer.eclipse.generator.framework.rules.runtime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.eclipse.swtbot.generator.framework.GenerationRule;
 import org.eclipse.swtbot.generator.framework.GenerationStackRule;
+import org.jboss.reddeer.eclipse.generator.framework.rules.console.ConsoleClearRule;
 import org.jboss.reddeer.swt.generator.framework.rules.ShellMenuRule;
 import org.jboss.reddeer.swt.generator.framework.rules.ShellRule;
 import org.jboss.reddeer.swt.generator.framework.rules.TreeRule;

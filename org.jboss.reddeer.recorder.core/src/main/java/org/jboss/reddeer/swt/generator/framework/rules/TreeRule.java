@@ -20,6 +20,8 @@ public class TreeRule extends GenerationSimpleRule {
 	private String shellName;
 	private List<String> parents;
 	private String viewName;
+	private boolean check;
+	private boolean checkDetail;
 	
 	public int getIndex() {
 		return index;
@@ -44,6 +46,9 @@ public class TreeRule extends GenerationSimpleRule {
 
 	@Override
 	protected String getActon() {
+		if(checkDetail){
+			return ".setCheck("+check+")";
+		}
 		return ".select()";
 	}
 
@@ -67,6 +72,9 @@ public class TreeRule extends GenerationSimpleRule {
 			parent = parent.getParentItem();
 		}
 		Collections.reverse(parents);
+		if(checkDetail = event.detail == SWT.CHECK){
+			check = ((TreeItem)event.item).getChecked();
+		}
 	}
 
 	@Override
@@ -91,6 +99,7 @@ public class TreeRule extends GenerationSimpleRule {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + (check ? 1231 : 1237);
 		result = prime * result + index;
 		result = prime * result
 				+ ((itemText == null) ? 0 : itemText.hashCode());
@@ -111,6 +120,8 @@ public class TreeRule extends GenerationSimpleRule {
 		if (getClass() != obj.getClass())
 			return false;
 		TreeRule other = (TreeRule) obj;
+		if (check != other.check)
+			return false;
 		if (index != other.index)
 			return false;
 		if (itemText == null) {
@@ -163,6 +174,14 @@ public class TreeRule extends GenerationSimpleRule {
 
 	public void setViewName(String viewName) {
 		this.viewName = viewName;
+	}
+
+	public boolean isCheck() {
+		return check;
+	}
+
+	public void setCheck(boolean check) {
+		this.check = check;
 	}
 	
 	

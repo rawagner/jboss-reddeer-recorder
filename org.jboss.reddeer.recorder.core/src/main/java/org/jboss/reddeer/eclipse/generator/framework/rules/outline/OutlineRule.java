@@ -1,4 +1,4 @@
-package org.jboss.reddeer.eclipse.generator.framework.rules;
+package org.jboss.reddeer.eclipse.generator.framework.rules.outline;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import org.jboss.reddeer.swt.generator.framework.rules.ShellMenuRule;
 import org.jboss.reddeer.swt.generator.framework.rules.ShellRule;
 import org.jboss.reddeer.swt.generator.framework.rules.TreeRule;
 
-public class ConsoleRule extends GenerationStackRule{
+public class OutlineRule extends GenerationStackRule{
 	
 	private List<GenerationRule> rules;
 
@@ -32,13 +32,13 @@ public class ConsoleRule extends GenerationStackRule{
 		ButtonRule br = new ButtonRule();
 		br.setGroup(null);
 		br.setIndex(1);
-		br.setText("ok");
+		br.setText("OK");
 		br.setShellName("Show View");
 		br.setStyle(SWT.PUSH);
 		
 		TreeRule tr = new TreeRule();
 		tr.setIndex(0);
-		tr.setItemText("Console");
+		tr.setItemText("Outline");
 		tr.setShellName("Show View");
 		List<String> parents = new ArrayList<String>();
 		parents.add("General");
@@ -61,15 +61,15 @@ public class ConsoleRule extends GenerationStackRule{
 			
 		}
 		if(!usedRules.contains(this)){
-			toReturn.add("Console console = new Console()");
+			toReturn.add("OutlineView outlineView = new OutlineView()");
 		}
-		toReturn.add("console.open()");
+		toReturn.add("outlineView.open()");
 		return toReturn;
 	}
 
 	@Override
 	public String getRuleName() {
-		return "console";
+		return "outline";
 	}
 
 	@Override
@@ -80,7 +80,7 @@ public class ConsoleRule extends GenerationStackRule{
 	@Override
 	public List<GenerationStackRule> getMethods() {
 		List<GenerationStackRule> methods = new ArrayList<GenerationStackRule>();
-		methods.add(new ConsoleClearRule());
+		methods.add(new OutlineCollapseAllRule());
 		return methods;
 	}
 
@@ -100,7 +100,7 @@ public class ConsoleRule extends GenerationStackRule{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ConsoleRule other = (ConsoleRule) obj;
+		OutlineRule other = (OutlineRule) obj;
 		if (rules == null) {
 			if (other.rules != null)
 				return false;
@@ -110,5 +110,6 @@ public class ConsoleRule extends GenerationStackRule{
 	}
 	
 	
+
 
 }

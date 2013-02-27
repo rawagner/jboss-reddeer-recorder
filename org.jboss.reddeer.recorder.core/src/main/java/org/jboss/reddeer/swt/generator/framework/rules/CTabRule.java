@@ -12,7 +12,6 @@ public class CTabRule extends GenerationSimpleRule{
 	
 	@Override
 	public boolean appliesTo(Event event) {
-		System.out.println(event.widget.getClass());
 		return event.widget instanceof CTabFolder && event.item instanceof CTabItem && event.type == SWT.Selection;
 	}
 

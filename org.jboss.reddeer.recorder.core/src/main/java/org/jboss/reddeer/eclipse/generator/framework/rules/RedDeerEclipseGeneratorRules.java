@@ -9,6 +9,12 @@ import org.eclipse.swtbot.generator.framework.GenerationComplexRule;
 import org.eclipse.swtbot.generator.framework.GenerationSimpleRule;
 import org.eclipse.swtbot.generator.framework.GenerationStackRule;
 import org.eclipse.swtbot.generator.framework.Generator;
+import org.jboss.reddeer.eclipse.generator.framework.rules.console.ConsoleRule;
+import org.jboss.reddeer.eclipse.generator.framework.rules.errorlog.ErrorLogRule;
+import org.jboss.reddeer.eclipse.generator.framework.rules.outline.OutlineRule;
+import org.jboss.reddeer.eclipse.generator.framework.rules.packageexplorer.PackageExplorerRule;
+import org.jboss.reddeer.eclipse.generator.framework.rules.problems.ProblemsRule;
+import org.jboss.reddeer.eclipse.generator.framework.rules.runtime.RuntimePreferencePageRule;
 import org.jboss.reddeer.swt.generator.framework.rules.RedDeerSWTGeneratorRules;
 
 public class RedDeerEclipseGeneratorRules extends Generator {

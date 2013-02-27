@@ -1,4 +1,4 @@
-package org.jboss.reddeer.eclipse.generator.framework.rules;
+package org.jboss.reddeer.eclipse.generator.framework.rules.packageexplorer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +12,14 @@ import org.jboss.reddeer.swt.generator.framework.rules.ShellMenuRule;
 import org.jboss.reddeer.swt.generator.framework.rules.ShellRule;
 import org.jboss.reddeer.swt.generator.framework.rules.TreeRule;
 
-public class ErrorLogRule extends GenerationStackRule{
+public class PackageExplorerRule extends GenerationStackRule{
 	
 	private List<GenerationRule> rules;
+
+	@Override
+	public String getRuleName() {
+		return "Package Explorer";
+	}
 
 	@Override
 	public List<GenerationRule> getInitializationRules() {
@@ -29,6 +34,14 @@ public class ErrorLogRule extends GenerationStackRule{
 		ShellRule shell = new ShellRule();
 		shell.setShellName("Show View");
 		
+		TreeRule tr = new TreeRule();
+		tr.setIndex(0);
+		tr.setItemText("Package Explorer");
+		tr.setShellName("Show View");
+		List<String> parents = new ArrayList<String>();
+		parents.add("Java");
+		tr.setParents(parents);
+		
 		ButtonRule br = new ButtonRule();
 		br.setGroup(null);
 		br.setIndex(1);
@@ -36,13 +49,8 @@ public class ErrorLogRule extends GenerationStackRule{
 		br.setShellName("Show View");
 		br.setStyle(SWT.PUSH);
 		
-		TreeRule tr = new TreeRule();
-		tr.setIndex(0);
-		tr.setItemText("Error Log");
-		tr.setShellName("Show View");
-		List<String> parents = new ArrayList<String>();
-		parents.add("General");
-		tr.setParents(parents);
+		
+		
 		
 		rules.add(mr);
 		rules.add(shell);
@@ -50,26 +58,17 @@ public class ErrorLogRule extends GenerationStackRule{
 		rules.add(br);
 		
 		return rules;
+		
 	}
 
 	@Override
 	public List<String> generateInitializationPhase(List<GenerationRule> rules, Set<GenerationStackRule> usedRules) {
 		List<String> toReturn = new ArrayList<String>();
-		for(GenerationStackRule r: usedRules){
-			System.out.println(r.getRuleName());
-			System.out.println(usedRules.contains(this));
-			
-		}
 		if(!usedRules.contains(this)){
-			toReturn.add("ErrorLog errorLog = new ErrorLog()");
+			toReturn.add("PackageExplorer packageExplorer = new PackageExplorer()");
 		}
-		toReturn.add("errorLog.open()");
+		toReturn.add("packageExplorer.open()");
 		return toReturn;
-	}
-
-	@Override
-	public String getRuleName() {
-		return "errorLog";
 	}
 
 	@Override
@@ -79,8 +78,11 @@ public class ErrorLogRule extends GenerationStackRule{
 
 	@Override
 	public List<GenerationStackRule> getMethods() {
-		// TODO Auto-generated method stub
-		return null;
+		List<GenerationStackRule> methods = new ArrayList<GenerationStackRule>();
+		methods.add(new PackageExplorerDeleteProjectOnDiskRule());
+		methods.add(new PackageExplorerDeleteProjectRule());
+		methods.add(new PackageExplorerSelectProject());
+		return methods;
 	}
 
 	@Override
@@ -99,7 +101,7 @@ public class ErrorLogRule extends GenerationStackRule{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ErrorLogRule other = (ErrorLogRule) obj;
+		PackageExplorerRule other = (PackageExplorerRule) obj;
 		if (rules == null) {
 			if (other.rules != null)
 				return false;
@@ -107,6 +109,7 @@ public class ErrorLogRule extends GenerationStackRule{
 			return false;
 		return true;
 	}
+	
 	
 	
 

@@ -1,4 +1,4 @@
-package org.jboss.reddeer.eclipse.generator.framework.rules;
+package org.jboss.reddeer.eclipse.generator.framework.rules.packageexplorer;
 
 import java.util.ArrayList;
 import java.util.List;

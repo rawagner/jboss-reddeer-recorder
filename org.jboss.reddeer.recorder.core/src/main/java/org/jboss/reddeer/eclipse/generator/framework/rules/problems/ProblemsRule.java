@@ -1,4 +1,4 @@
-package org.jboss.reddeer.eclipse.generator.framework.rules;
+package org.jboss.reddeer.eclipse.generator.framework.rules.problems;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,14 +12,9 @@ import org.jboss.reddeer.swt.generator.framework.rules.ShellMenuRule;
 import org.jboss.reddeer.swt.generator.framework.rules.ShellRule;
 import org.jboss.reddeer.swt.generator.framework.rules.TreeRule;
 
-public class PackageExplorerRule extends GenerationStackRule{
+public class ProblemsRule extends GenerationStackRule{
 	
 	private List<GenerationRule> rules;
-
-	@Override
-	public String getRuleName() {
-		return "Package Explorer";
-	}
 
 	@Override
 	public List<GenerationRule> getInitializationRules() {
@@ -34,23 +29,20 @@ public class PackageExplorerRule extends GenerationStackRule{
 		ShellRule shell = new ShellRule();
 		shell.setShellName("Show View");
 		
-		TreeRule tr = new TreeRule();
-		tr.setIndex(0);
-		tr.setItemText("Package Explorer");
-		tr.setShellName("Show View");
-		List<String> parents = new ArrayList<String>();
-		parents.add("Java");
-		tr.setParents(parents);
-		
 		ButtonRule br = new ButtonRule();
 		br.setGroup(null);
 		br.setIndex(1);
-		br.setText("ok");
+		br.setText("OK");
 		br.setShellName("Show View");
 		br.setStyle(SWT.PUSH);
 		
-		
-		
+		TreeRule tr = new TreeRule();
+		tr.setIndex(0);
+		tr.setItemText("Problems");
+		tr.setShellName("Show View");
+		List<String> parents = new ArrayList<String>();
+		parents.add("General");
+		tr.setParents(parents);
 		
 		rules.add(mr);
 		rules.add(shell);
@@ -58,17 +50,26 @@ public class PackageExplorerRule extends GenerationStackRule{
 		rules.add(br);
 		
 		return rules;
-		
 	}
 
 	@Override
 	public List<String> generateInitializationPhase(List<GenerationRule> rules, Set<GenerationStackRule> usedRules) {
 		List<String> toReturn = new ArrayList<String>();
-		if(!usedRules.contains(this)){
-			toReturn.add("PackageExplorer packageExplorer = new PackageExplorer()");
+		for(GenerationStackRule r: usedRules){
+			System.out.println(r.getRuleName());
+			System.out.println(usedRules.contains(this));
+			
 		}
-		toReturn.add("packageExplorer.open()");
+		if(!usedRules.contains(this)){
+			toReturn.add("ProblemsView problemsView = new ProblemsView");
+		}
+		toReturn.add("problemsView.open()");
 		return toReturn;
+	}
+
+	@Override
+	public String getRuleName() {
+		return "problems";
 	}
 
 	@Override
@@ -78,11 +79,8 @@ public class PackageExplorerRule extends GenerationStackRule{
 
 	@Override
 	public List<GenerationStackRule> getMethods() {
-		List<GenerationStackRule> methods = new ArrayList<GenerationStackRule>();
-		methods.add(new PackageExplorerDeleteProjectOnDiskRule());
-		methods.add(new PackageExplorerDeleteProjectRule());
-		methods.add(new PackageExplorerSelectProject());
-		return methods;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -101,7 +99,7 @@ public class PackageExplorerRule extends GenerationStackRule{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		PackageExplorerRule other = (PackageExplorerRule) obj;
+		ProblemsRule other = (ProblemsRule) obj;
 		if (rules == null) {
 			if (other.rules != null)
 				return false;
@@ -109,8 +107,5 @@ public class PackageExplorerRule extends GenerationStackRule{
 			return false;
 		return true;
 	}
-	
-	
-	
 
 }

@@ -42,17 +42,14 @@ public class TextRule extends GenerationSimpleRule{
 			if(group != null){
 				builder.append(",\""+group+"\"");
 			}
-			if(index >0){
-				builder.append(","+index);
-			}
 		} else {
 			builder.append("new DefaultText(");
 			if(group != null){
 				builder.append("\""+group+"\"");
-			}
-			if(group != null && index >0){
-				builder.append(","+index);
-			} else if(group == null && index > 0){
+				if(index >0){
+					builder.append(","+index);
+				} 
+			} else if(group == null){
 				builder.append(index);
 			}
 		}

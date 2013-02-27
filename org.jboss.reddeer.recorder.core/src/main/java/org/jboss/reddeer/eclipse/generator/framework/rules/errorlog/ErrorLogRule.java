@@ -1,4 +1,4 @@
-package org.jboss.reddeer.eclipse.generator.framework.rules;
+package org.jboss.reddeer.eclipse.generator.framework.rules.errorlog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,72 +8,72 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swtbot.generator.framework.GenerationRule;
 import org.eclipse.swtbot.generator.framework.GenerationStackRule;
 import org.jboss.reddeer.swt.generator.framework.rules.ButtonRule;
-import org.jboss.reddeer.swt.generator.framework.rules.ContextMenuRule;
+import org.jboss.reddeer.swt.generator.framework.rules.ShellMenuRule;
 import org.jboss.reddeer.swt.generator.framework.rules.ShellRule;
 import org.jboss.reddeer.swt.generator.framework.rules.TreeRule;
 
-public class PackageExplorerDeleteProjectOnDiskRule extends GenerationStackRule{
+public class ErrorLogRule extends GenerationStackRule{
 	
 	private List<GenerationRule> rules;
 
 	@Override
-	public String getRuleName() {
-		return "ProjectExplorerGetProjectRule";
-	}
-
-	@Override
 	public List<GenerationRule> getInitializationRules() {
 		rules = new ArrayList<GenerationRule>();
+		ShellMenuRule mr = new ShellMenuRule();
+		List<String> path = new ArrayList<String>();
+		path.add("Window");
+		path.add("Show View");
+		mr.setPath(path);
+		mr.setMenu("Other...");
 		
-		TreeRule tree = new TreeRule();
-		tree.setViewName("Package Explorer");
+		ShellRule shell = new ShellRule();
+		shell.setShellName("Show View");
 		
-		ContextMenuRule cm = new ContextMenuRule();
-		cm.setMenu("Delete");
-		cm.setPath(new ArrayList<String>());
+		ButtonRule br = new ButtonRule();
+		br.setGroup(null);
+		br.setIndex(1);
+		br.setText("OK");
+		br.setShellName("Show View");
+		br.setStyle(SWT.PUSH);
 		
-		ShellRule sm = new ShellRule();
-		sm.setShellName("Delete Resources");
+		TreeRule tr = new TreeRule();
+		tr.setIndex(0);
+		tr.setItemText("Error Log");
+		tr.setShellName("Show View");
+		List<String> parents = new ArrayList<String>();
+		parents.add("General");
+		tr.setParents(parents);
 		
-		ButtonRule button = new ButtonRule();
-		button.setStyle(SWT.CHECK);
-		button.setGroup(null);
-		button.setIndex(0);
-		button.setShellName("Delete Resources");
-		button.setText("&Delete project contents on disk (cannot be undone)");
-		button.setToggle(true);
-		
-		ButtonRule button1 = new ButtonRule();
-		button1.setStyle(SWT.PUSH);
-		button1.setGroup(null);
-		button1.setIndex(2);
-		button1.setShellName("Delete Resources");
-		button1.setText("OK");
-		
-		rules.add(tree);
-		rules.add(cm);
-		rules.add(sm);
-		rules.add(button);
-		rules.add(button1);
+		rules.add(mr);
+		rules.add(shell);
+		rules.add(tr);
+		rules.add(br);
 		
 		return rules;
 	}
 
 	@Override
 	public List<String> generateInitializationPhase(List<GenerationRule> rules, Set<GenerationStackRule> usedRules) {
-		String projectName = ((TreeRule)rules.get(0)).getItemText();
 		List<String> toReturn = new ArrayList<String>();
-		toReturn.add("projectExplorer.getProject(\""+projectName+"\").delete(true)");
+		for(GenerationStackRule r: usedRules){
+			System.out.println(r.getRuleName());
+			System.out.println(usedRules.contains(this));
+			
+		}
+		if(!usedRules.contains(this)){
+			toReturn.add("ErrorLog errorLog = new ErrorLog()");
+		}
+		toReturn.add("errorLog.open()");
 		return toReturn;
 	}
 
 	@Override
+	public String getRuleName() {
+		return "errorLog";
+	}
+
+	@Override
 	public boolean appliesTo(GenerationRule rule, int i) {
-		if(i==0){
-			if(rules.get(i).getClass().equals(rule.getClass())){
-				return ((TreeRule)rules.get(i)).getViewName().equals(((TreeRule)rule).getViewName());
-			}
-		}
 		return rule.equals(rules.get(i));
 	}
 
@@ -99,7 +99,7 @@ public class PackageExplorerDeleteProjectOnDiskRule extends GenerationStackRule{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		PackageExplorerDeleteProjectOnDiskRule other = (PackageExplorerDeleteProjectOnDiskRule) obj;
+		ErrorLogRule other = (ErrorLogRule) obj;
 		if (rules == null) {
 			if (other.rules != null)
 				return false;

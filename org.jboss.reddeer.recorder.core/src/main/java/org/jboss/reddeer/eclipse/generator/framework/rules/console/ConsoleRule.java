@@ -1,4 +1,4 @@
-package org.jboss.reddeer.eclipse.generator.framework.rules;
+package org.jboss.reddeer.eclipse.generator.framework.rules.console;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import org.jboss.reddeer.swt.generator.framework.rules.ShellMenuRule;
 import org.jboss.reddeer.swt.generator.framework.rules.ShellRule;
 import org.jboss.reddeer.swt.generator.framework.rules.TreeRule;
 
-public class OutlineRule extends GenerationStackRule{
+public class ConsoleRule extends GenerationStackRule{
 	
 	private List<GenerationRule> rules;
 
@@ -32,13 +32,13 @@ public class OutlineRule extends GenerationStackRule{
 		ButtonRule br = new ButtonRule();
 		br.setGroup(null);
 		br.setIndex(1);
-		br.setText("ok");
+		br.setText("OK");
 		br.setShellName("Show View");
 		br.setStyle(SWT.PUSH);
 		
 		TreeRule tr = new TreeRule();
 		tr.setIndex(0);
-		tr.setItemText("Outline");
+		tr.setItemText("Console");
 		tr.setShellName("Show View");
 		List<String> parents = new ArrayList<String>();
 		parents.add("General");
@@ -61,15 +61,15 @@ public class OutlineRule extends GenerationStackRule{
 			
 		}
 		if(!usedRules.contains(this)){
-			toReturn.add("OutlineView outlineView = new OutlineView()");
+			toReturn.add("Console console = new Console()");
 		}
-		toReturn.add("outlineView.open()");
+		toReturn.add("console.open()");
 		return toReturn;
 	}
 
 	@Override
 	public String getRuleName() {
-		return "outline";
+		return "console";
 	}
 
 	@Override
@@ -80,7 +80,7 @@ public class OutlineRule extends GenerationStackRule{
 	@Override
 	public List<GenerationStackRule> getMethods() {
 		List<GenerationStackRule> methods = new ArrayList<GenerationStackRule>();
-		methods.add(new OutlineCollapseAllRule());
+		methods.add(new ConsoleClearRule());
 		return methods;
 	}
 
@@ -100,7 +100,7 @@ public class OutlineRule extends GenerationStackRule{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		OutlineRule other = (OutlineRule) obj;
+		ConsoleRule other = (ConsoleRule) obj;
 		if (rules == null) {
 			if (other.rules != null)
 				return false;
@@ -110,6 +110,5 @@ public class OutlineRule extends GenerationStackRule{
 	}
 	
 	
-
 
 }

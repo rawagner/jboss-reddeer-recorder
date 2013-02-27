@@ -1,4 +1,4 @@
-package org.jboss.reddeer.eclipse.generator.framework.rules;
+package org.jboss.reddeer.eclipse.generator.framework.rules.packageexplorer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import org.jboss.reddeer.swt.generator.framework.rules.ContextMenuRule;
 import org.jboss.reddeer.swt.generator.framework.rules.ShellRule;
 import org.jboss.reddeer.swt.generator.framework.rules.TreeRule;
 
-public class PackageExplorerDeleteProjectRule extends GenerationStackRule{
+public class PackageExplorerDeleteProjectOnDiskRule extends GenerationStackRule{
 	
 	private List<GenerationRule> rules;
 
@@ -35,6 +35,14 @@ public class PackageExplorerDeleteProjectRule extends GenerationStackRule{
 		ShellRule sm = new ShellRule();
 		sm.setShellName("Delete Resources");
 		
+		ButtonRule button = new ButtonRule();
+		button.setStyle(SWT.CHECK);
+		button.setGroup(null);
+		button.setIndex(0);
+		button.setShellName("Delete Resources");
+		button.setText("&Delete project contents on disk (cannot be undone)");
+		button.setToggle(true);
+		
 		ButtonRule button1 = new ButtonRule();
 		button1.setStyle(SWT.PUSH);
 		button1.setGroup(null);
@@ -45,6 +53,7 @@ public class PackageExplorerDeleteProjectRule extends GenerationStackRule{
 		rules.add(tree);
 		rules.add(cm);
 		rules.add(sm);
+		rules.add(button);
 		rules.add(button1);
 		
 		return rules;
@@ -54,13 +63,13 @@ public class PackageExplorerDeleteProjectRule extends GenerationStackRule{
 	public List<String> generateInitializationPhase(List<GenerationRule> rules, Set<GenerationStackRule> usedRules) {
 		String projectName = ((TreeRule)rules.get(0)).getItemText();
 		List<String> toReturn = new ArrayList<String>();
-		toReturn.add("projectExplorer.getProject(\""+projectName+"\").delete(false)");
+		toReturn.add("projectExplorer.getProject(\""+projectName+"\").delete(true)");
 		return toReturn;
 	}
 
 	@Override
 	public boolean appliesTo(GenerationRule rule, int i) {
-		if(i == 0){
+		if(i==0){
 			if(rules.get(i).getClass().equals(rule.getClass())){
 				return ((TreeRule)rules.get(i)).getViewName().equals(((TreeRule)rule).getViewName());
 			}
@@ -90,7 +99,7 @@ public class PackageExplorerDeleteProjectRule extends GenerationStackRule{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		PackageExplorerDeleteProjectRule other = (PackageExplorerDeleteProjectRule) obj;
+		PackageExplorerDeleteProjectOnDiskRule other = (PackageExplorerDeleteProjectOnDiskRule) obj;
 		if (rules == null) {
 			if (other.rules != null)
 				return false;
@@ -98,7 +107,7 @@ public class PackageExplorerDeleteProjectRule extends GenerationStackRule{
 			return false;
 		return true;
 	}
+	
+	
 
-	
-	
 }
