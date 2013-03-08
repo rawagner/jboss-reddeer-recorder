@@ -101,10 +101,10 @@ public class ButtonRule extends GenerationSimpleRule {
 		if(group != null){
 			builder.append("\""+group+"\",");
 		}
-		if(text != null){
-			builder.append("\""+text+"\"");
-		} else {
+		if(text == null || text.isEmpty()){
 			builder.append(index);
+		} else {
+			builder.append("\""+text+"\"");
 		}
 		builder.append(")");
 		return builder.toString();
