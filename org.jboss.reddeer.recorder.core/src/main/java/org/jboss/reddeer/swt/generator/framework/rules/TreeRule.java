@@ -5,9 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swtbot.generator.framework.GenerationSimpleRule;
@@ -17,9 +15,7 @@ public class TreeRule extends GenerationSimpleRule {
 	
 	private int index;
 	private String itemText;
-	private String shellName;
 	private List<String> parents;
-	private String viewName;
 	private boolean check;
 	private boolean checkDetail;
 	
@@ -54,17 +50,9 @@ public class TreeRule extends GenerationSimpleRule {
 
 	@Override
 	public void initializeForEvent(Event event) {
-		CTabFolder folder = WidgetUtils.getView((Tree)event.widget);
-		if(folder != null){
-			this.viewName = folder.getSelection().getText();
-		}
 		this.index = WidgetUtils.getIndex((Tree)event.widget);	
 		this.itemText = ((TreeItem)event.item).getText();
-		Shell shell = WidgetUtils.getShell((Tree)event.widget);
-		if(shell!=null){
-			this.shellName = shell.getText();
-		}
-		
+		//((Tree)event.widget).getItems() check if there are the same items - if are, then use index
 		TreeItem parent = ((TreeItem)event.item).getParentItem();
 		parents = new ArrayList<String>();
 		while (parent != null) {
@@ -80,11 +68,7 @@ public class TreeRule extends GenerationSimpleRule {
 	@Override
 	protected String getWidgetAccessor() {
 		StringBuilder res = new StringBuilder();
-		if(shellName != null){
-			res.append("new ShellTreeItem(");
-		} else {
-			res.append("new ViewTreeItem(");
-		}
+		res.append("new DefaultTreeItem(");
 		if (index != 0) {
 			res.append(index+",");
 		}
@@ -93,6 +77,27 @@ public class TreeRule extends GenerationSimpleRule {
 		}
 		res.append("\""+itemText+"\")");
 		return res.toString();
+	}
+	
+	@Override
+	public String getRuleName() {
+		return "Tree rule";
+	}
+
+	public List<String> getParents() {
+		return parents;
+	}
+
+	public void setParents(List<String> parents) {
+		this.parents = parents;
+	}
+
+	public boolean isCheck() {
+		return check;
+	}
+
+	public void setCheck(boolean check) {
+		this.check = check;
 	}
 
 	@Override
@@ -104,10 +109,6 @@ public class TreeRule extends GenerationSimpleRule {
 		result = prime * result
 				+ ((itemText == null) ? 0 : itemText.hashCode());
 		result = prime * result + ((parents == null) ? 0 : parents.hashCode());
-		result = prime * result
-				+ ((shellName == null) ? 0 : shellName.hashCode());
-		result = prime * result
-				+ ((viewName == null) ? 0 : viewName.hashCode());
 		return result;
 	}
 
@@ -134,55 +135,10 @@ public class TreeRule extends GenerationSimpleRule {
 				return false;
 		} else if (!parents.equals(other.parents))
 			return false;
-		if (shellName == null) {
-			if (other.shellName != null)
-				return false;
-		} else if (!shellName.equals(other.shellName))
-			return false;
-		if (viewName == null) {
-			if (other.viewName != null)
-				return false;
-		} else if (!viewName.equals(other.viewName))
-			return false;
 		return true;
 	}
-
-	@Override
-	public String getRuleName() {
-		return "Tree rule";
-	}
-
-	public String getShellName() {
-		return shellName;
-	}
-
-	public void setShellName(String shellName) {
-		this.shellName = shellName;
-	}
-
-	public List<String> getParents() {
-		return parents;
-	}
-
-	public void setParents(List<String> parents) {
-		this.parents = parents;
-	}
-
-	public String getViewName() {
-		return viewName;
-	}
-
-	public void setViewName(String viewName) {
-		this.viewName = viewName;
-	}
-
-	public boolean isCheck() {
-		return check;
-	}
-
-	public void setCheck(boolean check) {
-		this.check = check;
-	}
+	
+	
 	
 	
 
