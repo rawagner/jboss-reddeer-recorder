@@ -21,6 +21,8 @@ public class TableRule extends GenerationSimpleRule {
 	private int items[];
 	private List<String> listOfSelectedItems = new ArrayList<String>();
 	private String shellName;
+	private boolean check;
+	private boolean checkDetail;
 
 	@Override
 	public boolean appliesTo(Event event) {
@@ -43,7 +45,9 @@ public class TableRule extends GenerationSimpleRule {
 		if(shell != null){
 			this.shellName = shell.getText();
 		}
-		
+		if(checkDetail = event.detail == SWT.CHECK){
+			check = table.getSelection()[0].getChecked();
+		}
 		
 	}
 
@@ -64,19 +68,28 @@ public class TableRule extends GenerationSimpleRule {
 	@Override
 	protected String getActon() {
 		StringBuilder builder  = new StringBuilder();
-		builder.append(".select(");
-		if(listOfSelectedItems.isEmpty()){
-			for(int i=0;i<items.length;i++){
-				builder.append(items[i]);
-				if(i<items.length-1){
-					builder.append(",");
-				}
+		if(checkDetail){
+			if(listOfSelectedItems.isEmpty()){ //only one item can be checked..so pick 0 always
+				return ".check("+items[0]+")";
+			} else {
+				return ".check(\"" +listOfSelectedItems.get(0)+ "\")";
 			}
+			
 		} else {
-			for(int i=0; i<listOfSelectedItems.size();i++){
-				builder.append("\""+listOfSelectedItems.get(i)+"\"");
-				if(i<listOfSelectedItems.size()-1){
-					builder.append(",");
+			builder.append(".select(");
+			if(listOfSelectedItems.isEmpty()){
+				for(int i=0;i<items.length;i++){
+					builder.append(items[i]);
+					if(i<items.length-1){
+						builder.append(",");
+					}
+				}
+			} else {
+				for(int i=0; i<listOfSelectedItems.size();i++){
+					builder.append("\""+listOfSelectedItems.get(i)+"\"");
+					if(i<listOfSelectedItems.size()-1){
+						builder.append(",");
+					}
 				}
 			}
 		}
@@ -89,40 +102,6 @@ public class TableRule extends GenerationSimpleRule {
 		return "table rule";
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((group == null) ? 0 : group.hashCode());
-		result = prime * result + index;
-		result = prime * result
-				+ ((shellName == null) ? 0 : shellName.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		TableRule other = (TableRule) obj;
-		if (group == null) {
-			if (other.group != null)
-				return false;
-		} else if (!group.equals(other.group))
-			return false;
-		if (index != other.index)
-			return false;
-		if (shellName == null) {
-			if (other.shellName != null)
-				return false;
-		} else if (!shellName.equals(other.shellName))
-			return false;
-		return true;
-	}
 
 	public String getGroup() {
 		return group;
@@ -166,5 +145,65 @@ public class TableRule extends GenerationSimpleRule {
 	public void setShellName(String shellName) {
 		this.shellName = shellName;
 	}
+
+	public boolean isCheck() {
+		return check;
+	}
+
+	public void setCheck(boolean check) {
+		this.check = check;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (check ? 1231 : 1237);
+		result = prime * result + ((group == null) ? 0 : group.hashCode());
+		result = prime * result + index;
+		result = prime * result + Arrays.hashCode(items);
+		result = prime
+				* result
+				+ ((listOfSelectedItems == null) ? 0 : listOfSelectedItems
+						.hashCode());
+		result = prime * result
+				+ ((shellName == null) ? 0 : shellName.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TableRule other = (TableRule) obj;
+		if (check != other.check)
+			return false;
+		if (group == null) {
+			if (other.group != null)
+				return false;
+		} else if (!group.equals(other.group))
+			return false;
+		if (index != other.index)
+			return false;
+		if (!Arrays.equals(items, other.items))
+			return false;
+		if (listOfSelectedItems == null) {
+			if (other.listOfSelectedItems != null)
+				return false;
+		} else if (!listOfSelectedItems.equals(other.listOfSelectedItems))
+			return false;
+		if (shellName == null) {
+			if (other.shellName != null)
+				return false;
+		} else if (!shellName.equals(other.shellName))
+			return false;
+		return true;
+	}
+
+	
 
 }
