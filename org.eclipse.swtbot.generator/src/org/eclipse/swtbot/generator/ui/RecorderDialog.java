@@ -34,7 +34,6 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
@@ -70,6 +69,7 @@ public class RecorderDialog extends TitleAreaDialog {
 	private Map<TabItem,SourceViewer> tabViewer = new HashMap<TabItem, SourceViewer>();
 	private TabFolder tabFolder;
 	private Button recordPauseButton;
+	private ToolItem tItemCheck;
 	
 	/**
 	 * Create the dialog.
@@ -138,11 +138,13 @@ public class RecorderDialog extends TitleAreaDialog {
 				  SourceViewer viewer = tabViewer.get(tabFolder.getSelection()[0]);
 				  CodeDocument doc = (CodeDocument)viewer.getDocument();
 				  if(doc.getActiveMethod() == null){
+					  tItemCheck.setEnabled(false);
 					  recorder.setRecording(false);
 					  recordPauseButton.setEnabled(false);
 					  recordPauseButton.setText("Start Recording");
 				  } else {
 					  recordPauseButton.setEnabled(true);
+					  tItemCheck.setEnabled(true);
 				  }
 			  }
 		});
@@ -197,6 +199,7 @@ public class RecorderDialog extends TitleAreaDialog {
 				createTabItem(tabFolder, className.getText());
 				className.setText("");
 				recorder.setRecording(false);
+				tItemCheck.setEnabled(false);
 				recordPauseButton.setText("Start Recording");
 				recordPauseButton.setEnabled(false);
 				
@@ -237,11 +240,12 @@ public class RecorderDialog extends TitleAreaDialog {
 		ToolItem tItemDrop = new ToolItem(toolBar, SWT.DROP_DOWN);
 		tItemDrop.setText("No active method");
 		
-		final ToolItem tItemCheck = new ToolItem(toolBar, SWT.CHECK);
+		tItemCheck = new ToolItem(toolBar, SWT.CHECK);
 		tItemCheck.setText("Mark as Test");
 		tItemCheck.setSelection(false);
+		tItemCheck.setEnabled(false);
 		
-		final DropdownSelectionListener listenerOne = new DropdownSelectionListener(tItemDrop, tItemCheck);
+		final DropdownSelectionListener listenerOne = new DropdownSelectionListener(tItemDrop);
 	    tItemDrop.addSelectionListener(listenerOne);
 		
 		tItem.addSelectionListener(new SelectionAdapter() {
@@ -344,17 +348,17 @@ public class RecorderDialog extends TitleAreaDialog {
 
 	class DropdownSelectionListener extends SelectionAdapter {
 		  private ToolItem dropdown;
-		  private ToolItem check;
 
 		  private Menu menu;
 
-		  public DropdownSelectionListener(ToolItem dropdown, ToolItem check) {
-			this.check = check;
+		  public DropdownSelectionListener(ToolItem dropdown) {
 		    this.dropdown = dropdown;
 		    menu = new Menu(dropdown.getParent());
 		  }
 
 		  public void add(String item) {
+			tItemCheck.setEnabled(true);
+			tItemCheck.setSelection(false);
 		    MenuItem menuItem = new MenuItem(menu, SWT.NONE);
 		    menuItem.setText(item);
 		    menuItem.addSelectionListener(new SelectionAdapter() {
@@ -367,9 +371,9 @@ public class RecorderDialog extends TitleAreaDialog {
 				CodeDocument doc = (CodeDocument)viewer.getDocument();
 		        doc.setActiveMethod(selected.getText());
 		        if(doc.getActiveMethod().isTest()){
-		        	check.setSelection(true);
+		        	tItemCheck.setSelection(true);
 		        } else {
-		        	check.setSelection(false);
+		        	tItemCheck.setSelection(false);
 		        }
 		      }
 		    });
