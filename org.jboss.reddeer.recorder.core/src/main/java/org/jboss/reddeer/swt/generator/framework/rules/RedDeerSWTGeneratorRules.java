@@ -1,16 +1,32 @@
 package org.jboss.reddeer.swt.generator.framework.rules;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.swtbot.generator.framework.GenerationComplexRule;
 import org.eclipse.swtbot.generator.framework.GenerationSimpleRule;
 import org.eclipse.swtbot.generator.framework.GenerationStackRule;
 import org.eclipse.swtbot.generator.framework.Generator;
+import org.jboss.reddeer.swt.generator.framework.rules.complex.CheckBoxFilterComplexRule;
+import org.jboss.reddeer.swt.generator.framework.rules.complex.ComboComplexRule;
+import org.jboss.reddeer.swt.generator.framework.rules.complex.TextComplexRule;
+import org.jboss.reddeer.swt.generator.framework.rules.complex.ToolBarMenuComplexRule;
+import org.jboss.reddeer.swt.generator.framework.rules.complex.TreeFilterComplexRule;
+import org.jboss.reddeer.swt.generator.framework.rules.simple.ButtonRule;
+import org.jboss.reddeer.swt.generator.framework.rules.simple.CTabWorkbenchRule;
+import org.jboss.reddeer.swt.generator.framework.rules.simple.ComboRule;
+import org.jboss.reddeer.swt.generator.framework.rules.simple.ContextMenuRule;
+import org.jboss.reddeer.swt.generator.framework.rules.simple.HyperlinkRule;
+import org.jboss.reddeer.swt.generator.framework.rules.simple.ListRule;
+import org.jboss.reddeer.swt.generator.framework.rules.simple.ShellMenuRule;
+import org.jboss.reddeer.swt.generator.framework.rules.simple.ShellRule;
+import org.jboss.reddeer.swt.generator.framework.rules.simple.TabRule;
+import org.jboss.reddeer.swt.generator.framework.rules.simple.TableRule;
+import org.jboss.reddeer.swt.generator.framework.rules.simple.TextRule;
+import org.jboss.reddeer.swt.generator.framework.rules.simple.ToolBarRule;
+import org.jboss.reddeer.swt.generator.framework.rules.simple.TreeRule;
 
-public class RedDeerSWTGeneratorRules extends Generator{
+public class RedDeerSWTGeneratorRules implements Generator{
 
 	public List<GenerationSimpleRule> createSimpleRules() {
 		List<GenerationSimpleRule> res = new ArrayList<GenerationSimpleRule>();
@@ -24,7 +40,9 @@ public class RedDeerSWTGeneratorRules extends Generator{
 		res.add(new TableRule());
 		res.add(new ShellRule());
 		res.add(new ContextMenuRule());
-		res.add(new CTabRule());
+		res.add(new CTabWorkbenchRule());
+		res.add(new ListRule());
+		res.add(new HyperlinkRule());
 		return res;
 	}
 
@@ -32,30 +50,20 @@ public class RedDeerSWTGeneratorRules extends Generator{
 		return "RedDeer SWT";
 	}
 
+	@Override
+	public List<GenerationComplexRule> createComplexRules() {
+		List<GenerationComplexRule> res = new ArrayList<GenerationComplexRule>();
+		res.add(new ToolBarMenuComplexRule());
+		res.add(new ComboComplexRule());
+		res.add(new TextComplexRule());
+		res.add(new TreeFilterComplexRule());
+		res.add(new CheckBoxFilterComplexRule());
+		return res;
+	}
+
+	@Override
 	public List<GenerationStackRule> createStackRules() {
+		// TODO Auto-generated method stub
 		return null;
 	}
-
-	public boolean useStacks() {
-		return false;
-	}
-
-	@Override
-	protected List<GenerationComplexRule> sortComplexRules() {
-		List<GenerationComplexRule> complexRules = new ArrayList<GenerationComplexRule>();
-		complexRules.add(new ToolBarMenuComplexRule());
-		
-		Collections.sort(complexRules, new Comparator<GenerationComplexRule>() {
-			public int compare(GenerationComplexRule g1, GenerationComplexRule g2) {
-				return g2.getInitializationRules().size()-g1.getInitializationRules().size();
-			}
-		});
-		return complexRules;
-	}
-
-	@Override
-	protected List<GenerationStackRule> sortStackRules() {
-		return null;
-	}
-
 }

@@ -1,4 +1,4 @@
-package org.jboss.reddeer.eclipse.generator.framework.rules.runtime;
+package org.jboss.reddeer.eclipse.generator.framework.rules.view;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,39 +6,57 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swtbot.generator.framework.GenerationRule;
 import org.eclipse.swtbot.generator.framework.GenerationStackRule;
+import org.eclipse.swtbot.generator.ui.listener.WorkbenchListener;
 import org.jboss.reddeer.swt.generator.framework.rules.complex.TreeFilterComplexRule;
+import org.jboss.reddeer.swt.generator.framework.rules.simple.ButtonRule;
+import org.jboss.reddeer.swt.generator.framework.rules.simple.CTabWorkbenchRule;
 import org.jboss.reddeer.swt.generator.framework.rules.simple.ShellMenuRule;
 import org.jboss.reddeer.swt.generator.framework.rules.simple.ShellRule;
 import org.jboss.reddeer.swt.generator.framework.rules.simple.TreeRule;
 
-public class RuntimePreferencePageRule extends GenerationStackRule{
+public abstract class AbstractOpenViewRule extends GenerationStackRule{
 	
 	private List<GenerationRule> rules;
 	
-	public RuntimePreferencePageRule(){
+	public AbstractOpenViewRule(String category, String viewName) {
 		rules = new ArrayList<GenerationRule>();
 		
 		ShellMenuRule mr = new ShellMenuRule();
 		List<String> path = new ArrayList<String>();
 		path.add("Window");
+		path.add("Show View");
 		mr.setPath(path);
-		mr.setMenu("Preferences");
+		mr.setMenu("Other...");
 		
 		ShellRule sr = new ShellRule();
-		sr.setShellTitle("Preferences");
+		sr.setShellTitle("Show View");
 		sr.setShellAction(SWT.Activate);
-
+		
 		TreeRule tr = new TreeRule();
 		tr.setTreeIndex(0);
-		tr.setItemText("Runtime Environments");
+		tr.setItemText(viewName);
+		tr.setShellTitle("Show View");
 		List<String> parents = new ArrayList<String>();
-		parents.add("Server");
+		parents.add(category);
 		tr.setParents(parents);
-		tr.setShellTitle("Preferences");
+		
+		ButtonRule br = new ButtonRule();
+		br.setGroup(null);
+		br.setIndex(1);
+		br.setText("OK");
+		br.setShellTitle("Show View");
+		br.setStyle(SWT.PUSH);
+		
+		CTabWorkbenchRule ct = new CTabWorkbenchRule();
+		ct.setText(viewName);
+		ct.setDetail(WorkbenchListener.PART_ACTIVATED);
 		
 		rules.add(mr);
 		rules.add(sr);
 		rules.add(tr);
+		rules.add(br);
+		rules.add(ct);//if part is activated then this event wont be fired
+		
 	}
 
 	@Override
@@ -46,16 +64,17 @@ public class RuntimePreferencePageRule extends GenerationStackRule{
 		if(rules.size() <= i){
 			return false;
 		}
-		if(i==2 && rule instanceof TreeFilterComplexRule){
-			TreeFilterComplexRule tf = (TreeFilterComplexRule)rule;
-			return tf.getInitializationRules().get(tf.getInitializationRules().size()-1).equals(this.rules.get(i));
+		if(i == 2 && rule instanceof TreeFilterComplexRule){
+				TreeFilterComplexRule tf = (TreeFilterComplexRule)rule;
+				return tf.getInitializationRules().get(tf.getInitializationRules().size()-1).equals(this.rules.get(i));
 		}
-		return this.rules.get(i).equals(rule);
+		return rules.get(i).equals(rule);
+
 	}
 
 	@Override
 	public boolean appliesTo(List<GenerationRule> rules) {
-		if(this.rules.size() != rules.size()){
+		if(rules.size() != 4 && rules.size() != 5){ //depends if ctabworkbenchrule was fired
 			return false;
 		}
 		for(int i=0;i<rules.size();i++){
@@ -71,24 +90,5 @@ public class RuntimePreferencePageRule extends GenerationStackRule{
 			}
 		}
 		return true;
-	}
-
-	@Override
-	public List<GenerationStackRule> getMethods() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
-	public List<String> getActions() {
-		List<String> toReturn = new ArrayList<String>();
-		toReturn.add("RuntimePreferencePage() runtimePreferencePage = new RuntimePreferencePage()");
-		toReturn.add("runtimePreferencePage.open()");
-		return toReturn;
-	}
-	
-	@Override
-	public String getImport() {
-		return "org.jboss.reddeer.eclipse.wst.server.ui.RuntimePreferencePage";
 	}
 }
