@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="botGeneratorSupport" name="UI Bot Code Generator" schema="schema/generator.exsd"/>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="org.eclipse.swtbot.generator.ui.StartupRecorder">
+      </startup>
+   </extension>
+   <extension
+         point="org.eclipse.swtbot.generator.botGeneratorSupport">
+      <generator
+            class="org.eclipse.swtbot.generator.framework.rules.SWTBotGeneratorRules">
+      </generator>
+   </extension>
+   
+      <extension
+         point="org.eclipse.ui.commands">
+      <category
+            name="Generator"
+            id="org.eclipse.swtbot.generator.category">
+      </category>
+      <command
+            name="Generator"
+            categoryId="org.eclipse.swtbot.generator.category"
+            id="org.eclipse.swtbot.generator.ui.launcher.GeneratorLaunchHandler">
+      </command>
+   </extension>
+   <extension
+  		 point="org.eclipse.ui.menus">
+         <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="org.eclipse.swtbot.generator.ui.launcher.GeneratorLaunchHandler">
+            <command
+                  commandId="org.eclipse.swtbot.generator.ui.launcher.GeneratorLaunchHandler"
+                  icon="icons/sample.gif"
+                  tooltip="Run SWT Generator"
+                  id="org.eclipse.swtbot.generator.toolbar.GeneratorLaunchHandler">
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            commandId="org.eclipse.swtbot.generator.ui.launcher.GeneratorLaunchHandler"
+            class="org.eclipse.swtbot.generator.ui.launcher.GeneratorLaunchHandler">
+      </handler>
+   </extension>
+   
+   
+   <extension point="org.eclipse.debug.core.launchConfigurationTypes">
+  	 <launchConfigurationType
+            delegate="org.eclipse.swtbot.generator.ui.launcher.GeneratorLauncherConfiguration"
+            delegateDescription="description"
+            delegateName="Recorder launcher"
+            id="org.eclipse.swtbot.generator.ui.launcher.GeneratorLauncherConfiguration"
+            migrationDelegate="org.eclipse.pde.internal.launching.launcher.PDEMigrationDelegate"
+            modes="run"
+            name="Recorder"
+            sourceLocatorId="org.eclipse.pde.ui.launcher.PDESourceLookupDirector"
+            sourcePathComputerId="org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer">
+      </launchConfigurationType>
+	</extension>
+   	
+   	<extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            type="org.eclipse.swtbot.generator.ui.launcher.GeneratorLauncherConfiguration"
+            class="org.eclipse.swtbot.generator.ui.launcher.GeneratorTabGroup"
+            id="org.eclipse.swtbot.generator.ui.launcher.GeneratorTabGroup">
+         <launchMode
+               description="Create a configuration that will launch a Recorder"
+               mode="run">
+         </launchMode>
+      </launchConfigurationTabGroup>
+   </extension>
+
+</plugin>
