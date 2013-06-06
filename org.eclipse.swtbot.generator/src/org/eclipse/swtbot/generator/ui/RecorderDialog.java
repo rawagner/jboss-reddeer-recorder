@@ -179,7 +179,8 @@ public class RecorderDialog extends TitleAreaDialog {
 				for(String c: code){
 					doc.addCode(c);
 				}
-				viewer.setTopIndex(viewer.getBottomIndexEndOffset());
+				viewer.setTopIndex(((CodeDocument)viewer.getDocument()).getLastOffset()-4);
+				//viewer.setTopIndex(viewer.getBottomIndexEndOffset());
 			}
 		});
 		copyButton.addSelectionListener(new SelectionAdapter() {

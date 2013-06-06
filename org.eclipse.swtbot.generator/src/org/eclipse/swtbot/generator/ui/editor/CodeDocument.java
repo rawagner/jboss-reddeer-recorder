@@ -16,6 +16,7 @@ public class CodeDocument extends Document {
 
 	private Set<String> imports;
 	private List<Method> methods;
+	private int lastOffset;
 
 	public CodeDocument(String className) {
 		super();
@@ -86,6 +87,7 @@ public class CodeDocument extends Document {
 		try {
 			edit.addChild(new InsertEdit(getLineOffset(offset), "		"+code + ";\n"));
 			edit.apply(this);
+			lastOffset = offset;
 		} catch (MalformedTreeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -201,6 +203,14 @@ public class CodeDocument extends Document {
 			}
 		}
 		return null;
+	}
+
+	public int getLastOffset() {
+		return lastOffset;
+	}
+
+	public void setLastOffset(int lastOffset) {
+		this.lastOffset = lastOffset;
 	}
 
 }

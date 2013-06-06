@@ -3,8 +3,6 @@ package org.eclipse.swtbot.generator.ui.editor;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.text.source.SourceViewer;
-
 public class Method {
 	
 	private List<String> code;
