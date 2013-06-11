@@ -1,6 +1,7 @@
-package org.jboss.reddeer.eclipse.generator.framework.rules.runtime;
+package org.jboss.reddeer.eclipse.generator.framework.rules.preference;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -11,11 +12,11 @@ import org.jboss.reddeer.swt.generator.framework.rules.simple.ShellMenuRule;
 import org.jboss.reddeer.swt.generator.framework.rules.simple.ShellRule;
 import org.jboss.reddeer.swt.generator.framework.rules.simple.TreeRule;
 
-public class RuntimePreferencePageRule extends GenerationStackRule{
+public abstract class AbstractOpenPreferencePage extends GenerationStackRule{
 	
 	private List<GenerationRule> rules;
 	
-	public RuntimePreferencePageRule(){
+	public AbstractOpenPreferencePage(String item, String... parents) {
 		rules = new ArrayList<GenerationRule>();
 		
 		ShellMenuRule mr = new ShellMenuRule();
@@ -30,10 +31,9 @@ public class RuntimePreferencePageRule extends GenerationStackRule{
 
 		TreeRule tr = new TreeRule();
 		tr.setTreeIndex(0);
-		tr.setItemText("Runtime Environments");
-		List<String> parents = new ArrayList<String>();
-		parents.add("Server");
-		tr.setParents(parents);
+		tr.setItemText(item);
+		
+		tr.setParents(Arrays.asList(parents));
 		tr.setShellTitle("Preferences");
 		
 		rules.add(mr);
@@ -73,22 +73,10 @@ public class RuntimePreferencePageRule extends GenerationStackRule{
 		return true;
 	}
 
-	@Override
-	public List<GenerationStackRule> getMethods() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public abstract List<GenerationStackRule> getMethods();		
 	
-	@Override
-	public List<String> getActions() {
-		List<String> toReturn = new ArrayList<String>();
-		toReturn.add("RuntimePreferencePage() runtimePreferencePage = new RuntimePreferencePage()");
-		toReturn.add("runtimePreferencePage.open()");
-		return toReturn;
-	}
+	public abstract List<String> getActions();
 	
-	@Override
-	public String getImport() {
-		return "org.jboss.reddeer.eclipse.wst.server.ui.RuntimePreferencePage";
-	}
+	public abstract String getImport();
+
 }

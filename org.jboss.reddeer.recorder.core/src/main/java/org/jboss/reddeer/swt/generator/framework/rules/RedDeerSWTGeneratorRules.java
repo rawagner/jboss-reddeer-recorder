@@ -1,12 +1,18 @@
 package org.jboss.reddeer.swt.generator.framework.rules;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swtbot.generator.framework.AnnotationRule;
 import org.eclipse.swtbot.generator.framework.GenerationComplexRule;
 import org.eclipse.swtbot.generator.framework.GenerationSimpleRule;
 import org.eclipse.swtbot.generator.framework.GenerationStackRule;
 import org.eclipse.swtbot.generator.framework.Generator;
+import org.jboss.reddeer.eclipse.generator.framework.rules.annotation.CleanWorkspaceAnnotationRule;
+import org.jboss.reddeer.eclipse.generator.framework.rules.annotation.TestAnnotationRule;
 import org.jboss.reddeer.swt.generator.framework.rules.complex.CheckBoxFilterComplexRule;
 import org.jboss.reddeer.swt.generator.framework.rules.complex.ComboComplexRule;
 import org.jboss.reddeer.swt.generator.framework.rules.complex.TextComplexRule;
@@ -65,5 +71,20 @@ public class RedDeerSWTGeneratorRules implements Generator{
 	public List<GenerationStackRule> createStackRules() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<AnnotationRule> createAnnotationRules() {
+		List<AnnotationRule> annotations = new ArrayList<AnnotationRule>();
+		annotations.add(new TestAnnotationRule());
+		annotations.add(new CleanWorkspaceAnnotationRule());
+		return annotations;
+	}
+
+	@Override
+	public Image getImage() {
+		InputStream is = getClass().getResourceAsStream("/icons/reddeer_logo.png");
+		Image image = new Image(Display.getCurrent(), is);
+		return image;
 	}
 }

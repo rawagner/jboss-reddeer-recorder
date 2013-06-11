@@ -51,7 +51,7 @@ public class StartupRecorder implements IStartup {
 				page.addPartListener(new WorkbenchListener(dispatcher));
 				
 				Shell recorderShell = new Shell(PlatformUI.getWorkbench().getDisplay(), SWT.CLOSE | SWT.MODELESS | SWT.BORDER | SWT.TITLE);
-				recorderShell.setText("SWTBot test recorder");
+				recorderShell.setText("Bot test recorder");
 				dispatcher.ignoreShell(recorderShell);
 				RecorderDialog recorderDialog = new RecorderDialog(recorderShell, dispatcher, availableGenerators);
 				recorderDialog.open();

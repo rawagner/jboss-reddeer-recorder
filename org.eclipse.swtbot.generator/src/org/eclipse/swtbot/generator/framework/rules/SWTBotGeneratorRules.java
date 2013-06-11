@@ -13,6 +13,8 @@ package org.eclipse.swtbot.generator.framework.rules;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swtbot.generator.framework.AnnotationRule;
 import org.eclipse.swtbot.generator.framework.GenerationComplexRule;
 import org.eclipse.swtbot.generator.framework.GenerationSimpleRule;
 import org.eclipse.swtbot.generator.framework.GenerationStackRule;
@@ -38,6 +40,16 @@ public class SWTBotGeneratorRules implements Generator {
 	}
 
 	public List<GenerationStackRule> createStackRules() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<AnnotationRule> createAnnotationRules() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Image getImage() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -18,8 +18,10 @@ public class GeneratorTabGroup extends EclipseLauncherTabGroup{
 		//super.createTabs(dialog, mode);
 		
 		ILaunchConfigurationTab[] tabs = null;
-		tabs = new ILaunchConfigurationTab[] {new ProjectTab(), new MainTab(), new JavaArgumentsTab(), new PluginsTab(), new ConfigurationTab(), new TracingTab(), new EnvironmentTab(), new CommonTab()};
+		tabs = new ILaunchConfigurationTab[] {new MainTab(), new JavaArgumentsTab(), new PluginsTab(), new ConfigurationTab(), new TracingTab(), new EnvironmentTab(), new CommonTab()};
 		setTabs(tabs);
 	}
+	
+	
 
 }
