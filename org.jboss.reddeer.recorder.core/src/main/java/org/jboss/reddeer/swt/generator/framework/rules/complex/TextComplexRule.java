@@ -66,8 +66,8 @@ public class TextComplexRule extends GenerationComplexRule{
 	}
 
 	@Override
-	public String getImport() {
-		return tRule.getImport();
+	public List<String> getImports() {
+		return tRule.getImports();
 	}
 
 	

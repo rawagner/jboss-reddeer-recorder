@@ -12,6 +12,9 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swtbot.generator.framework.GenerationSimpleRule;
 import org.eclipse.swtbot.generator.framework.WidgetUtils;
+import org.eclipse.ui.forms.widgets.Hyperlink;
+import org.eclipse.ui.forms.widgets.Section;
+import org.jboss.reddeer.swt.generator.framework.rules.RuleUtils;
 
 public class TreeRule extends GenerationSimpleRule {
 	
@@ -20,6 +23,7 @@ public class TreeRule extends GenerationSimpleRule {
 	private List<String> parents;
 	private boolean check;
 	private boolean checkDetail;
+	private String section;
 	
 	public int getTreeIndex() {
 		return treeIndex;
@@ -65,12 +69,19 @@ public class TreeRule extends GenerationSimpleRule {
 		if(checkDetail = event.detail == SWT.CHECK){
 			check = ((TreeItem)event.item).getChecked();
 		}
+		Section sec = WidgetUtils.getSection((Hyperlink)event.widget);
+		if(sec!=null){
+			setSection(sec.getText());
+		}
 	}
 
 	@Override
 	public List<String> getActions() {
 		List<String> toReturn = new ArrayList<String>();
 		StringBuilder res = new StringBuilder();
+		if(section!=null){
+			toReturn.add(RuleUtils.getSectionRule(section));
+		}
 		res.append("new DefaultTreeItem(");
 		if (treeIndex != 0) {
 			res.append(treeIndex+",");
@@ -157,8 +168,21 @@ public class TreeRule extends GenerationSimpleRule {
 	}
 
 	@Override
-	public String getImport() {
-		return "org.jboss.reddeer.swt.impl.tree.DefaultTreeItem";
+	public List<String> getImports() {
+		List<String> toReturn = new ArrayList<String>();
+		toReturn.add("org.jboss.reddeer.swt.impl.tree.DefaultTreeItem");
+		if(section != null){
+			toReturn.add(RuleUtils.SECTION_IMPORT);
+		}
+		return toReturn;
+	}
+
+	public String getSection() {
+		return section;
+	}
+
+	public void setSection(String section) {
+		this.section = section;
 	}
 	
 	

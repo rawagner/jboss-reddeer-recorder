@@ -73,10 +73,4 @@ public abstract class AbstractOpenPreferencePage extends GenerationStackRule{
 		return true;
 	}
 
-	public abstract List<GenerationStackRule> getMethods();		
-	
-	public abstract List<String> getActions();
-	
-	public abstract String getImport();
-
 }

@@ -13,6 +13,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swtbot.generator.framework.GenerationSimpleRule;
 import org.eclipse.swtbot.generator.framework.WidgetUtils;
+import org.eclipse.ui.forms.widgets.Section;
+import org.jboss.reddeer.swt.generator.framework.rules.RuleUtils;
 
 public class TableRule extends GenerationSimpleRule {
 	
@@ -22,6 +24,7 @@ public class TableRule extends GenerationSimpleRule {
 	private List<String> listOfSelectedItems = new ArrayList<String>();
 	private boolean check;
 	private boolean checkDetail;
+	private String section;
 
 	@Override
 	public boolean appliesTo(Event event) {
@@ -47,6 +50,10 @@ public class TableRule extends GenerationSimpleRule {
 		if(checkDetail = event.detail == SWT.CHECK){
 			check = table.getSelection()[0].getChecked();
 		}
+		Section sec = WidgetUtils.getSection((Table)event.widget);
+		if(sec!=null){
+			setSection(sec.getText());
+		}
 		
 	}
 
@@ -54,6 +61,9 @@ public class TableRule extends GenerationSimpleRule {
 	public List<String> getActions() {
 		List<String> toReturn = new ArrayList<String>();
 		StringBuilder builder  = new StringBuilder();
+		if(section!=null){
+			toReturn.add(RuleUtils.getSectionRule(section));
+		}
 		builder.append("new DefaultTable(");
 		if(group != null){
 			builder.append("\""+group+"\",");
@@ -186,9 +196,23 @@ public class TableRule extends GenerationSimpleRule {
 		return true;
 	}
 
+	
 	@Override
-	public String getImport() {
-		return "org.jboss.reddeer.swt.impl.table.DefaultTable";
+	public List<String> getImports() {
+		List<String> toReturn = new ArrayList<String>();
+		toReturn.add("org.jboss.reddeer.swt.impl.table.DefaultTable");
+		if(section != null){
+			toReturn.add(RuleUtils.SECTION_IMPORT);
+		}
+		return toReturn;
+	}
+
+	public String getSection() {
+		return section;
+	}
+
+	public void setSection(String section) {
+		this.section = section;
 	}
 
 	

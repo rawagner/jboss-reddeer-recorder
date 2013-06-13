@@ -24,5 +24,5 @@ public abstract class GenerationRule {
 	 */
 	public abstract List<String> getActions();
 	
-	public abstract String getImport();
+	public abstract List<String> getImports();
 }

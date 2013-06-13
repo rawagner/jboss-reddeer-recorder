@@ -27,10 +27,12 @@ public class PackageExplorerRule extends AbstractOpenViewRule{
 		toReturn.add("packageExplorer.open()");
 		return toReturn;
 	}
-
+	
 	@Override
-	public String getImport() {
-		return "org.jboss.reddeer.eclipse.ui.packageexplorer.PackageExplorer";
+	public List<String> getImports() {
+		List<String> toReturn = new ArrayList<String>();
+		toReturn.add("org.jboss.reddeer.eclipse.ui.packageexplorer.PackageExplorer");
+		return toReturn;
 	}
 	
 	

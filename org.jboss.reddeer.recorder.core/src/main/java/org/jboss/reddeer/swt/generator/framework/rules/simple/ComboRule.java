@@ -9,6 +9,8 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.generator.framework.GenerationSimpleRule;
 import org.eclipse.swtbot.generator.framework.WidgetUtils;
+import org.eclipse.ui.forms.widgets.Section;
+import org.jboss.reddeer.swt.generator.framework.rules.RuleUtils;
 
 public class ComboRule extends GenerationSimpleRule{
 
@@ -17,6 +19,7 @@ public class ComboRule extends GenerationSimpleRule{
 	private int index;
 	private int selection;
 	private String group;
+	private String section;
 	
 	@Override
 	public boolean appliesTo(Event event) {
@@ -35,12 +38,19 @@ public class ComboRule extends GenerationSimpleRule{
 		if(s!=null){
 			setShellTitle(s.getText());
 		}
+		Section sec = WidgetUtils.getSection((Combo)event.widget);
+		if(sec!=null){
+			setSection(sec.getText());
+		}
 	}
 
 	@Override
 	public List<String> getActions() {
 		StringBuilder builder = new StringBuilder();
 		List<String> toReturn = new ArrayList<String>();
+		if(section!=null){
+			toReturn.add(RuleUtils.getSectionRule(section));
+		}
 		builder.append("new DefaultCombo(");
 		if(group != null){
 			builder.append("\""+group+"\"");
@@ -147,8 +157,21 @@ public class ComboRule extends GenerationSimpleRule{
 	}
 
 	@Override
-	public String getImport() {
-		return "org.jboss.reddeer.swt.impl.combo.DefaultCombo";
+	public List<String> getImports() {
+		List<String> toReturn = new ArrayList<String>();
+		toReturn.add("org.jboss.reddeer.swt.impl.combo.DefaultCombo");
+		if(section != null){
+			toReturn.add(RuleUtils.SECTION_IMPORT);
+		}
+		return toReturn;
+	}
+
+	public String getSection() {
+		return section;
+	}
+
+	public void setSection(String section) {
+		this.section = section;
 	}
 	
 	

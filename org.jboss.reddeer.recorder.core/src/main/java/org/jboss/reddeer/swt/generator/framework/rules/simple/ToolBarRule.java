@@ -10,6 +10,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swtbot.generator.framework.GenerationSimpleRule;
 import org.eclipse.swtbot.generator.framework.WidgetUtils;
+import org.eclipse.ui.forms.widgets.Section;
+import org.jboss.reddeer.swt.generator.framework.rules.RuleUtils;
 
 public class ToolBarRule extends GenerationSimpleRule{
 	
@@ -18,6 +20,7 @@ public class ToolBarRule extends GenerationSimpleRule{
 	public static final int VIEW=2;
 	public static final int SHELL=3;
 	private int type;
+	private String section;
 	
 
 	@Override
@@ -44,12 +47,19 @@ public class ToolBarRule extends GenerationSimpleRule{
 		} else {
 			type=WORKBENCH;
 		}
+		Section sec = WidgetUtils.getSection(((ToolItem)event.widget).getParent());
+		if(sec!=null){
+			setSection(sec.getText());
+		}
 	}
 
 	@Override
 	public List<String> getActions() {
 		List<String> toReturn = new ArrayList<String>();
 		StringBuilder builder = new StringBuilder();
+		if(section!=null){
+			toReturn.add(RuleUtils.getSectionRule(section));
+		}
 		if(type==WORKBENCH){
 			builder.append("new WorkbenchToolItem(");
 		} else if (type==VIEW){
@@ -107,17 +117,29 @@ public class ToolBarRule extends GenerationSimpleRule{
 			return false;
 		return true;
 	}
-
+	
 	@Override
-	public String getImport() {
+	public List<String> getImports() {
+		List<String> toReturn = new ArrayList<String>();
 		if(type==WORKBENCH){
-			return "org.jboss.reddeer.swt.impl.toolbar.WorkbenchToolItem";
+			toReturn.add("org.jboss.reddeer.swt.impl.toolbar.WorkbenchToolItem");
 		} else if (type==VIEW){
-			return "org.jboss.reddeer.swt.impl.toolbar.ViewToolItem";
+			toReturn.add("org.jboss.reddeer.swt.impl.toolbar.ViewToolItem");
 		} else if(type==SHELL){
-			return "org.jboss.reddeer.swt.impl.toolbar.ShellToolItem";
+			toReturn.add("org.jboss.reddeer.swt.impl.toolbar.ShellToolItem");
 		}
-		return null;
+		if(section != null){
+			toReturn.add(RuleUtils.SECTION_IMPORT);
+		}
+		return toReturn;
+	}
+
+	public String getSection() {
+		return section;
+	}
+
+	public void setSection(String section) {
+		this.section = section;
 	}
 	
 	

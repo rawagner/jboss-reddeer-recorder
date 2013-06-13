@@ -118,5 +118,4 @@ public class WidgetUtils {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart().getTitle();
 	}
 
-
 }

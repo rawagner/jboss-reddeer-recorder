@@ -98,6 +98,7 @@ public class RecorderDialog extends TitleAreaDialog {
 	protected Control createDialogArea(Composite parent) {
 		this.getShell().setText("Recorder");
 		setTitle("Bot Test Recorder");
+		
 		Composite container = (Composite) super.createDialogArea(parent);
 		container.setLayout(new GridLayout(1, false));
 		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -120,10 +121,11 @@ public class RecorderDialog extends TitleAreaDialog {
 		generatorSelectionCombo.setSelection(new StructuredSelection(this.recorder.getCurrentGenerator()));
 		Image image  = this.recorder.getCurrentGenerator().getImage();
 		if(image != null){
-			image = new Image(Display.getCurrent(), image.getImageData().scaledTo(90, 90));
+			image = new Image(Display.getCurrent(), image.getImageData().scaledTo(80, 80));
 			setTitleImage(image);
 		} else {
-			setTitleImage(getDefaultImage());
+			image = new Image(Display.getCurrent(), getDefaultImage().getImageData().scaledTo(80, 80));
+			setTitleImage(image);
 		}
 		
 		generatorSelectionCombo.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -134,10 +136,11 @@ public class RecorderDialog extends TitleAreaDialog {
 				((DropDownClassAnnotationSelectionListener)annotationsClassToolItem.getData()).addItems(recorder.getCurrentGenerator().createAnnotationRules());
 				Image image  = newGenerator.getImage();
 				if(image != null){
-					image = new Image(Display.getCurrent(), image.getImageData().scaledTo(90,90));
+					image = new Image(Display.getCurrent(), image.getImageData().scaledTo(80,80));
 					setTitleImage(image);
 				} else {
-					setTitleImage(getDefaultImage());
+					image = new Image(Display.getCurrent(), getDefaultImage().getImageData().scaledTo(80, 80));
+					setTitleImage(image);
 				}
 			}
 		});
@@ -201,10 +204,14 @@ public class RecorderDialog extends TitleAreaDialog {
 		});
 
 		this.recorder.addListener(new CodeGenerationListener() {
-			public void handleCodeGenerated(List<String> code, String importCode) {
+			public void handleCodeGenerated(List<String> code, List<String> importCode) {
 				SourceViewer viewer = tabViewer.get(classTabFolder.getSelection());
 				ClassDocument doc = (ClassDocument) viewer.getDocument();
-				doc.addImport(importCode);
+				if(importCode != null){
+					for (String c : importCode) {
+						doc.addImport(c);
+					}
+				}
 				for (String c : code) {
 					doc.addCode(c);
 				}

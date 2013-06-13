@@ -29,8 +29,10 @@ public class OutlineRule extends AbstractOpenViewRule{
 	}
 
 	@Override
-	public String getImport() {
-		return "org.jboss.reddeer.eclipse.ui.views.contentoutline.OutlineView";
+	public List<String> getImports() {
+		List<String> toReturn = new ArrayList<String>();
+		toReturn.add("org.jboss.reddeer.eclipse.ui.views.contentoutline.OutlineView");
+		return toReturn;
 	}
 	
 	

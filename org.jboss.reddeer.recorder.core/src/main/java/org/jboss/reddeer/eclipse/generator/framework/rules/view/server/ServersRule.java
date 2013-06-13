@@ -29,8 +29,10 @@ public class ServersRule extends AbstractOpenViewRule{
 	}
 
 	@Override
-	public String getImport() {
-		return "org.jboss.reddeer.eclipse.wst.server.ui.view.ServersView";
+	public List<String> getImports() {
+		List<String> toReturn = new ArrayList<String>();
+		toReturn.add("org.jboss.reddeer.eclipse.wst.server.ui.view.ServersView");
+		return toReturn;
 	}
 
 }

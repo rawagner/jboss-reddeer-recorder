@@ -27,8 +27,10 @@ public class DriverDefinitionPreferencePageRule extends AbstractOpenPreferencePa
 	}
 	
 	@Override
-	public String getImport() {
-		return "org.jboss.reddeer.eclipse.datatools.ui.preference.DriverDefinitionPreferencePage";
+	public List<String> getImports() {
+		List<String> toReturn = new ArrayList<String>();
+		toReturn.add("org.jboss.reddeer.eclipse.datatools.ui.preference.DriverDefinitionPreferencePage");
+		return toReturn;
 	}
 
 }

@@ -9,6 +9,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swtbot.generator.framework.GenerationSimpleRule;
 import org.eclipse.swtbot.generator.framework.WidgetUtils;
+import org.eclipse.ui.forms.widgets.Section;
+import org.jboss.reddeer.swt.generator.framework.rules.RuleUtils;
 
 public class TextRule extends GenerationSimpleRule{
 	
@@ -16,6 +18,7 @@ public class TextRule extends GenerationSimpleRule{
 	private String group;
 	private int index;
 	private String label;
+	private String section;
 
 	@Override
 	public boolean appliesTo(Event event) {
@@ -33,6 +36,10 @@ public class TextRule extends GenerationSimpleRule{
 		}
 		this.setGroup(WidgetUtils.getGroup((Text)event.widget));
 		this.setLabel(WidgetUtils.getLabel((Text)event.widget));
+		Section sec = WidgetUtils.getSection((Text)event.widget);
+		if(sec!=null){
+			setSection(sec.getText());
+		}
 		
 		
 	}
@@ -41,6 +48,9 @@ public class TextRule extends GenerationSimpleRule{
 	public List<String> getActions() {
 		List<String> toReturn = new ArrayList<String>();
 		StringBuilder builder = new StringBuilder();
+		if(section!=null){
+			toReturn.add(RuleUtils.getSectionRule(section));
+		}
 		if(label != null){
 			builder.append("new LabeledText(\""+label+"\"");
 			if(group != null){
@@ -134,12 +144,27 @@ public class TextRule extends GenerationSimpleRule{
 			return false;
 		return true;
 	}
-
+	
 	@Override
-	public String getImport() {
+	public List<String> getImports() {
+		List<String> toReturn = new ArrayList<String>();
 		if(label!=null){
-			return "org.jboss.reddeer.swt.impl.text.LabeledText";
-		} return "org.jboss.reddeer.swt.impl.text.DefaultText";
+			toReturn.add("org.jboss.reddeer.swt.impl.text.LabeledText");
+		} else {
+			toReturn.add("org.jboss.reddeer.swt.impl.text.DefaultText");
+		}
+		if(section != null){
+			toReturn.add(RuleUtils.SECTION_IMPORT);
+		}
+		return toReturn;
+	}
+
+	public String getSection() {
+		return section;
+	}
+
+	public void setSection(String section) {
+		this.section = section;
 	}
 	
 	

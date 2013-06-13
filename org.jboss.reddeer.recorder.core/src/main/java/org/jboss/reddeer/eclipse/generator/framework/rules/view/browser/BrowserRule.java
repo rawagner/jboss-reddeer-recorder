@@ -27,9 +27,11 @@ public class BrowserRule extends AbstractOpenViewRule{
 		toReturn.add("browserView.open()");
 		return toReturn;
 	}
-
+	
 	@Override
-	public String getImport() {
-		return "org.jboss.reddeer.eclipse.ui.browser.BrowserView";
+	public List<String> getImports() {
+		List<String> toReturn = new ArrayList<String>();
+		toReturn.add("org.jboss.reddeer.eclipse.ui.browser.BrowserView");
+		return toReturn;
 	}
 } 

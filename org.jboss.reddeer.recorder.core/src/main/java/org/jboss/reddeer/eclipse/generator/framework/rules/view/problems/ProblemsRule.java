@@ -27,9 +27,11 @@ public class ProblemsRule extends AbstractOpenViewRule{
 		toReturn.add("problemsView.open()");
 		return toReturn;
 	}
-
+	
 	@Override
-	public String getImport() {
-		return "org.jboss.reddeer.eclipse.ui.problems.ProblemsView";
+	public List<String> getImports() {
+		List<String> toReturn = new ArrayList<String>();
+		toReturn.add("org.jboss.reddeer.eclipse.ui.problems.ProblemsView");
+		return toReturn;
 	}
 }

@@ -1,5 +1,6 @@
 package org.jboss.reddeer.swt.generator.framework.rules.simple;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.eclipse.swt.SWT;
@@ -7,6 +8,8 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swtbot.generator.framework.GenerationSimpleRule;
 import org.eclipse.swtbot.generator.framework.WidgetUtils;
+import org.eclipse.ui.forms.widgets.Section;
+import org.jboss.reddeer.swt.generator.framework.rules.RuleUtils;
 
 public class ListRule extends GenerationSimpleRule{
 	
@@ -14,6 +17,7 @@ public class ListRule extends GenerationSimpleRule{
 	private int index;
 	private String group;
 	private String label;
+	private String section;
 
 	@Override
 	public boolean appliesTo(Event event) {
@@ -26,6 +30,10 @@ public class ListRule extends GenerationSimpleRule{
 		label = WidgetUtils.getLabel(((List)event.widget));
 		group = WidgetUtils.getGroup(((List)event.widget));
 		index = WidgetUtils.getIndex(((List)event.widget));
+		Section sec = WidgetUtils.getSection((List)event.widget);
+		if(sec!=null){
+			setSection(sec.getText());
+		}
 		
 	}
 
@@ -33,6 +41,9 @@ public class ListRule extends GenerationSimpleRule{
 	public java.util.List<String> getActions() {
 		java.util.List<String> toReturn = new java.util.ArrayList<String>();
 		StringBuilder list = new StringBuilder();
+		if(section!=null){
+			toReturn.add(RuleUtils.getSectionRule(section));
+		}
 		list.append("new DefaultList(");
 		if(group != null){
 			list.append("\""+group+"\",");
@@ -83,10 +94,23 @@ public class ListRule extends GenerationSimpleRule{
 			return false;
 		return true;
 	}
-
+	
 	@Override
-	public String getImport() {
-		return "org.jboss.reddeer.swt.impl.list.DefaultList";
+	public java.util.List<String> getImports() {
+		java.util.List<String> toReturn = new ArrayList<String>();
+		toReturn.add("org.jboss.reddeer.swt.impl.list.DefaultList");
+		if(section != null){
+			toReturn.add(RuleUtils.SECTION_IMPORT);
+		}
+		return toReturn;
+	}
+
+	public String getSection() {
+		return section;
+	}
+
+	public void setSection(String section) {
+		this.section = section;
 	}
 	
 	

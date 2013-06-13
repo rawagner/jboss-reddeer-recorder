@@ -42,8 +42,8 @@ public class CheckBoxFilterComplexRule extends GenerationComplexRule{
 	}
 
 	@Override
-	public String getImport() {
-		return bRule.getImport();
+	public List<String> getImports() {
+		return bRule.getImports();
 	}
 
 }

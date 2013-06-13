@@ -39,8 +39,8 @@ public class ComboComplexRule extends GenerationComplexRule{
 	}
 
 	@Override
-	public String getImport() {
-		return cRule.getImport();
+	public List<String> getImports() {
+		return cRule.getImports();
 	}
 
 }

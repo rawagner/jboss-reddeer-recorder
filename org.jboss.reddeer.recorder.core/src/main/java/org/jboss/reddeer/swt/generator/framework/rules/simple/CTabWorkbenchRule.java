@@ -80,10 +80,12 @@ public class CTabWorkbenchRule extends GenerationSimpleRule{
 	public void setDetail(int detail) {
 		this.detail = detail;
 	}
-
+	
 	@Override
-	public String getImport() {
-		return "org.jboss.reddeer.workbench.view.impl.WorkbenchView";
+	public List<String> getImports() {
+		List<String> toReturn = new ArrayList<String>();
+		toReturn.add("org.jboss.reddeer.workbench.view.impl.WorkbenchView");
+		return toReturn;
 	}
 
 }

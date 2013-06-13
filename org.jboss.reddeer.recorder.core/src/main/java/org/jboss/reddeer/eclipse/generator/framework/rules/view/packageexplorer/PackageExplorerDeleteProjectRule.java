@@ -130,7 +130,7 @@ public class PackageExplorerDeleteProjectRule extends GenerationStackRule{
 	}
 
 	@Override
-	public String getImport() {
+	public List<String> getImports() {
 		// TODO Auto-generated method stub
 		return null;
 	}

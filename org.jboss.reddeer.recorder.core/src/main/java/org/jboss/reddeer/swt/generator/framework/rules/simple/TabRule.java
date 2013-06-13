@@ -12,8 +12,6 @@ public class TabRule extends GenerationSimpleRule{
 	
 	private String text;
 	
-	
-
 	public String getText() {
 		return text;
 	}
@@ -67,8 +65,10 @@ public class TabRule extends GenerationSimpleRule{
 	}
 
 	@Override
-	public String getImport() {
-		return "org.jboss.reddeer.swt.impl.tab.DefaultTabItem";
+	public List<String> getImports() {
+		List<String> toReturn = new ArrayList<String>();
+		toReturn.add("org.jboss.reddeer.swt.impl.tab.DefaultTabItem");
+		return toReturn;
 	}
 
 }

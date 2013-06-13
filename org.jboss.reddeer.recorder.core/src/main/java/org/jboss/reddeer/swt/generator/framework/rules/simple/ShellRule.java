@@ -79,10 +79,12 @@ public class ShellRule extends GenerationSimpleRule{
 			return false;
 		return true;
 	}
-
+	
 	@Override
-	public String getImport() {
-		return "org.jboss.reddeer.swt.impl.shell.DefaultShell";
+	public List<String> getImports() {
+		List<String> toReturn = new ArrayList<String>();
+		toReturn.add("org.jboss.reddeer.swt.impl.shell.DefaultShell");
+		return toReturn;
 	}
 
 }

@@ -10,6 +10,8 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.generator.framework.GenerationSimpleRule;
 import org.eclipse.swtbot.generator.framework.WidgetUtils;
+import org.eclipse.ui.forms.widgets.Section;
+import org.jboss.reddeer.swt.generator.framework.rules.RuleUtils;
 
 public class ButtonRule extends GenerationSimpleRule {
 
@@ -18,6 +20,7 @@ public class ButtonRule extends GenerationSimpleRule {
 	private String group;
 	private int style;
 	private boolean toggle;
+	private String section;
 	
 	public String getText() {
 		return text;
@@ -71,6 +74,10 @@ public class ButtonRule extends GenerationSimpleRule {
 		this.group = WidgetUtils.getGroup((Button)event.widget);
 		this.index = WidgetUtils.getIndex((Button)event.widget);
 		Shell s = WidgetUtils.getShell((Button)event.widget);
+		Section sec = WidgetUtils.getSection((Button)event.widget);
+		if(sec!=null){
+			setSection(sec.getText());
+		}
 		if(s!=null){
 			setShellTitle(s.getText());
 		}
@@ -86,6 +93,9 @@ public class ButtonRule extends GenerationSimpleRule {
 	public List<String> getActions() {
 		List<String> toReturn = new ArrayList<String>();
 		StringBuilder builder = new StringBuilder();
+		if(section!=null){
+			toReturn.add(RuleUtils.getSectionRule(section));
+		}
 		if((style & SWT.PUSH)!=0){
 			builder.append("new PushButton(");
 		} else if((style & SWT.CHECK)!=0){
@@ -161,19 +171,32 @@ public class ButtonRule extends GenerationSimpleRule {
 	}
 
 	@Override
-	public String getImport() {
-		if((style & SWT.PUSH)!=0){
-			return "org.jboss.reddeer.swt.impl.button.PushButton";
-		} else if((style & SWT.CHECK)!=0){
-			return "org.jboss.reddeer.swt.impl.button.CheckButton";
-		} else if((style & SWT.ARROW)!=0){
-			return "org.jboss.reddeer.swt.impl.button.ArrowButton";
-		} else if((style & SWT.RADIO)!=0){
-			return "org.jboss.reddeer.swt.impl.button.RadioButton";
-		} else if((style & SWT.TOGGLE)!=0){
-			return "org.jboss.reddeer.swt.impl.button.ToggleButton";
+	public List<String> getImports() {
+		List<String> toReturn = new ArrayList<String>();
+		if(section!= null){
+			toReturn.add(RuleUtils.SECTION_IMPORT);
 		}
-		return null;
+		
+		if((style & SWT.PUSH)!=0){
+			toReturn.add("org.jboss.reddeer.swt.impl.button.PushButton");
+		} else if((style & SWT.CHECK)!=0){
+			toReturn.add("org.jboss.reddeer.swt.impl.button.CheckButton");
+		} else if((style & SWT.ARROW)!=0){
+			toReturn.add("org.jboss.reddeer.swt.impl.button.ArrowButton");
+		} else if((style & SWT.RADIO)!=0){
+			toReturn.add("org.jboss.reddeer.swt.impl.button.RadioButton");
+		} else if((style & SWT.TOGGLE)!=0){
+			toReturn.add("org.jboss.reddeer.swt.impl.button.ToggleButton");
+		}
+		return toReturn;
+	}
+
+	public String getSection() {
+		return section;
+	}
+
+	public void setSection(String section) {
+		this.section = section;
 	}
 	
 	

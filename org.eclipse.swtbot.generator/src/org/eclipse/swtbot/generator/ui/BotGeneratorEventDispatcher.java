@@ -36,7 +36,7 @@ import org.eclipse.swtbot.generator.framework.WidgetUtils;
 public class BotGeneratorEventDispatcher implements Listener {
 
 	public static interface CodeGenerationListener {
-		public void handleCodeGenerated(List<String> code, String importCode);
+		public void handleCodeGenerated(List<String> code, List<String> importCode);
 	}
 
 	private List<GenerationSimpleRule> listOfSimpleRules = new ArrayList<GenerationSimpleRule>();
@@ -122,6 +122,13 @@ public class BotGeneratorEventDispatcher implements Listener {
 							.isEnabled())) {
 			return;
 		}
+		if(event.widget!=null){
+		System.out.println(event.widget.getClass());
+		}
+		if(event.item != null){
+			System.out.println(event.item.getClass());
+		}
+		
 		processRules(event);
 	}
 
@@ -248,7 +255,7 @@ public class BotGeneratorEventDispatcher implements Listener {
 		for (int i = keep; i > 0; i--) {
 			toKeep.add(listOfRules.get(listOfRules.size() - i));
 		}
-		dispatchCodeGenerated(longestMatchedStack.getActions(),longestMatchedStack.getImport());
+		dispatchCodeGenerated(longestMatchedStack.getActions(),longestMatchedStack.getImports());
 		if (longestMatchedStack.getMethods() != null) {
 			openedStack = longestMatchedStack;
 		}
@@ -259,7 +266,7 @@ public class BotGeneratorEventDispatcher implements Listener {
 	}
 
 	private void processStackNoMatch() {
-		dispatchCodeGenerated(listOfRules.get(0).getActions(),listOfRules.get(0).getImport()); // generate code for first simple rule
+		dispatchCodeGenerated(listOfRules.get(0).getActions(),listOfRules.get(0).getImports()); // generate code for first simple rule
 		listOfRules.remove(0);
 		processRules(null); // process listRules without the first element
 	}
@@ -303,7 +310,7 @@ public class BotGeneratorEventDispatcher implements Listener {
 		return toDelete;
 	}
 
-	private void dispatchCodeGenerated(List<String> code, String importCode) {
+	private void dispatchCodeGenerated(List<String> code, List<String> importCode) {
 		if (code != null) {
 			for (CodeGenerationListener listener : this.listeners) {
 				listener.handleCodeGenerated(code,importCode);

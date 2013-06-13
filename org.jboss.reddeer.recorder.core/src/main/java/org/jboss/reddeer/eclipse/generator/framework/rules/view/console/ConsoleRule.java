@@ -26,11 +26,14 @@ public class ConsoleRule extends AbstractOpenViewRule{
 		toReturn.add("consoleView.open()");
 		return toReturn;
 	}
-
+	
 	@Override
-	public String getImport() {
-		return "org.jboss.reddeer.eclipse.ui.console.ConsoleView";
+	public List<String> getImports() {
+		List<String> toReturn = new ArrayList<String>();
+		toReturn.add("org.jboss.reddeer.eclipse.ui.console.ConsoleView");
+		return toReturn;
 	}
+
 
 
 
