@@ -10,7 +10,6 @@
  *******************************************************************************/
 package org.eclipse.swtbot.generator.ui;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +38,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -48,17 +46,17 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
-import org.eclipse.swtbot.generator.framework.AnnotationRule;
 import org.eclipse.swtbot.generator.framework.Generator;
 import org.eclipse.swtbot.generator.ui.BotGeneratorEventDispatcher.CodeGenerationListener;
 import org.eclipse.swtbot.generator.ui.editor.ClassDocument;
 import org.eclipse.swtbot.generator.ui.editor.Method;
+import org.eclipse.swtbot.generator.ui.listener.DropDownMethodSelectionListener;
+import org.eclipse.swtbot.generator.ui.listener.DropDownAnnotationSelectionListener;
+import org.eclipse.swtbot.generator.ui.listener.DropDownClassAnnotationSelectionListener;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.jdt.ui.text.JavaSourceViewerConfiguration;
@@ -74,7 +72,8 @@ public class RecorderDialog extends TitleAreaDialog {
 	private CTabFolder classTabFolder;
 	private Button recordPauseButton;
 	private ToolItem annotationsToolItem;
-	private DropdownMethodSelectionListener methodListener;
+	private ToolItem annotationsClassToolItem;
+	private DropDownMethodSelectionListener methodListener;
 
 	/**
 	 * Create the dialog.
@@ -131,7 +130,8 @@ public class RecorderDialog extends TitleAreaDialog {
 			public void selectionChanged(SelectionChangedEvent event) {
 				Generator newGenerator = (Generator) ((IStructuredSelection) event.getSelection()).getFirstElement();
 				recorder.setGenerator(newGenerator);
-				((DropdownAnnotationSelectionListener)annotationsToolItem.getData()).addItems(recorder.getCurrentGenerator().createAnnotationRules());
+				((DropDownAnnotationSelectionListener)annotationsToolItem.getData()).addItems(recorder.getCurrentGenerator().createAnnotationRules());
+				((DropDownClassAnnotationSelectionListener)annotationsClassToolItem.getData()).addItems(recorder.getCurrentGenerator().createAnnotationRules());
 				Image image  = newGenerator.getImage();
 				if(image != null){
 					image = new Image(Display.getCurrent(), image.getImageData().scaledTo(90,90));
@@ -168,7 +168,8 @@ public class RecorderDialog extends TitleAreaDialog {
 					recorder.setRecording(false);
 					recordPauseButton.setText("Start Recording");
 				}
-				((DropdownAnnotationSelectionListener)annotationsToolItem.getData()).update();
+				((DropDownAnnotationSelectionListener)annotationsToolItem.getData()).update();
+				((DropDownClassAnnotationSelectionListener)annotationsClassToolItem.getData()).update();
 			}
 		});
 
@@ -246,18 +247,11 @@ public class RecorderDialog extends TitleAreaDialog {
 		annotationsToolItem = new ToolItem(toolBar, SWT.DROP_DOWN);
 		annotationsToolItem.setText("Method annotation");
 		
-		final DropdownAnnotationSelectionListener listenerAnnot = new DropdownAnnotationSelectionListener(annotationsToolItem, false);
-		annotationsToolItem.addSelectionListener(listenerAnnot);
-		annotationsToolItem.setData(listenerAnnot);
 		
-		ToolItem annotationsClassToolItem = new ToolItem(toolBar, SWT.DROP_DOWN);
+		annotationsClassToolItem = new ToolItem(toolBar, SWT.DROP_DOWN);
 		annotationsClassToolItem.setText("Class annotation");
-		
-		final DropdownAnnotationSelectionListener listenerClassAnnot = new DropdownAnnotationSelectionListener(annotationsToolItem, true);
-		annotationsClassToolItem.addSelectionListener(listenerClassAnnot);
-		annotationsClassToolItem.setData(listenerClassAnnot);
 
-		methodListener = new DropdownMethodSelectionListener(tItemDrop);
+		methodListener = new DropDownMethodSelectionListener(tItemDrop, recorder,tabViewer,classTabFolder,annotationsToolItem);
 		tItemDrop.addSelectionListener(methodListener);
 
 		tItem.addSelectionListener(new SelectionAdapter() {
@@ -281,13 +275,15 @@ public class RecorderDialog extends TitleAreaDialog {
 		tabItem.setControl(composite);
 		tabFolder.setSelection(tabItem);
 		tabViewer.put(tabItem, generatedCode);
-		listenerAnnot.update();
 		doc.setViewer(generatedCode);
-	}
-
-	@Override
-	public void createButtonsForButtonBar(Composite parent) {
-		// Override to remove default buttons
+		
+		final DropDownAnnotationSelectionListener listenerAnnot = new DropDownAnnotationSelectionListener(annotationsToolItem, recorder,tabViewer,classTabFolder);
+		annotationsToolItem.addSelectionListener(listenerAnnot);
+		annotationsToolItem.setData(listenerAnnot);
+		final DropDownClassAnnotationSelectionListener listenerClassAnnot = new DropDownClassAnnotationSelectionListener(annotationsClassToolItem, recorder,tabViewer,classTabFolder);
+		annotationsClassToolItem.addSelectionListener(listenerClassAnnot);
+		annotationsClassToolItem.setData(listenerClassAnnot);
+		listenerAnnot.update();
 	}
 	
 	private void openClassShell(){
@@ -438,6 +434,8 @@ public class RecorderDialog extends TitleAreaDialog {
 					recordPauseButton.setText("Pause");
 				}
 				addMethodShell.close();
+				((DropDownAnnotationSelectionListener)annotationsToolItem.getData()).update();
+				((DropDownClassAnnotationSelectionListener)annotationsClassToolItem.getData()).update();
 			}
 		});
 
@@ -450,149 +448,9 @@ public class RecorderDialog extends TitleAreaDialog {
 	protected Point getInitialSize() {
 		return new Point(585, 650);
 	}
-
-	class DropdownMethodSelectionListener extends SelectionAdapter {
-		private ToolItem dropdown;
-
-		private Menu menu;
-
-		public DropdownMethodSelectionListener(ToolItem dropdown) {
-			this.dropdown = dropdown;
-			menu = new Menu(dropdown.getParent());
-		}
-
-		public void add(String item) {
-			MenuItem menuItem = new MenuItem(menu, SWT.NONE);
-			menuItem.setText(item);
-			menuItem.addSelectionListener(new SelectionAdapter() {
-
-				@Override
-				public void widgetSelected(SelectionEvent event) {
-					MenuItem selected = (MenuItem) event.widget;
-					dropdown.setText(selected.getText());
-					SourceViewer viewer = tabViewer.get(classTabFolder.getSelection());
-					ClassDocument doc = (ClassDocument) viewer.getDocument();
-					doc.setActiveMethod(selected.getText());
-					((DropdownAnnotationSelectionListener)annotationsToolItem.getData()).update();
-					viewer.setTopIndex(((ClassDocument) viewer.getDocument()).getLastOffset()-4);
-				}
-			});
-			dropdown.setText(item);
-			SourceViewer viewer = tabViewer.get(classTabFolder.getSelection());
-			ClassDocument doc = (ClassDocument) viewer.getDocument();
-			doc.setActiveMethod(menuItem.getText());
-			((DropdownAnnotationSelectionListener)annotationsToolItem.getData()).update();
-
-		}
-		public void widgetSelected(SelectionEvent event) {
-			if (event.detail == SWT.ARROW) {
-				ToolItem item = (ToolItem) event.widget;
-				Rectangle rect = item.getBounds();
-				Point pt = item.getParent().toDisplay(new Point(rect.x, rect.y));
-				menu.setLocation(pt.x, pt.y + rect.height);
-				menu.setVisible(true);
-			}
-		}
-	}
-
-	class DropdownAnnotationSelectionListener extends SelectionAdapter {
-
-		private ToolItem dropDown;
-		private Menu menu;
-		private boolean classAnnotation;
-
-		public DropdownAnnotationSelectionListener(ToolItem dropdown, boolean classAnnotation) {
-			this.dropDown=dropdown;
-			menu = new Menu(dropdown.getParent());
-			List<AnnotationRule> rulesToAdd = new ArrayList<AnnotationRule>();
-			this.classAnnotation = classAnnotation;
-			if(classAnnotation){
-				for(AnnotationRule r: recorder.getCurrentGenerator().createAnnotationRules()){
-					if(r.isClassAnnotation()){
-						rulesToAdd.add(r);
-					}
-				}
-			} else {
-				for(AnnotationRule r: recorder.getCurrentGenerator().createAnnotationRules()){
-					if(!r.isClassAnnotation()){
-						rulesToAdd.add(r);
-					}
-				}
-			}
-			addItems(rulesToAdd);
-		}
-
-		public void addItems(List<AnnotationRule> items) {
-			menu = new Menu(dropDown.getParent());
-			if(items != null){
-				for (AnnotationRule item : items) {
-					final MenuItem menuItem = new MenuItem(menu, SWT.CHECK);
-					menuItem.setText(item.getAnnotation());
-					menuItem.setData(item);
-					menuItem.addSelectionListener(new SelectionAdapter() {
-
-						@Override
-						public void widgetSelected(SelectionEvent event) {
-							MenuItem selected = (MenuItem) event.widget;
-							SourceViewer viewer = tabViewer.get(classTabFolder.getSelection());
-							ClassDocument doc = (ClassDocument) viewer.getDocument();
-							if (selected.getSelection()) {
-								if(!classAnnotation){
-									doc.addAnnotation((AnnotationRule) menuItem.getData());
-								} else {
-									doc.addClassAnnotation((AnnotationRule) menuItem.getData());
-								}
-							} else {
-								if(!classAnnotation){
-									doc.removeAnnotation((AnnotationRule) menuItem.getData());
-								} else {
-									doc.removeClassAnnotation((AnnotationRule) menuItem.getData());
-								}
-							}
-							update();
-						}
-					});
-				}
-			}
-		}
-
-		public void update() {
-			SourceViewer viewer = tabViewer.get(classTabFolder.getSelection());
-			if(viewer != null){
-				ClassDocument doc = (ClassDocument) viewer.getDocument();
-				if(!classAnnotation){
-				if(doc.getActiveMethod() != null){
-					dropDown.setEnabled(true);
-					for (MenuItem i : menu.getItems()) {
-						if (doc.getActiveMethod().getAnnotations().contains(i.getData())) {
-							i.setSelection(true);
-						} else {
-							i.setSelection(false);
-						}
-					}
-				} else {
-					dropDown.setEnabled(false);
-				}
-				} else {
-					for (MenuItem i : menu.getItems()) {
-						if (doc.getClassAnnotations().contains(i.getData())) {
-							i.setSelection(true);
-						} else {
-							i.setSelection(false);
-						}
-					}
-				}
-			}
-		}
-
-		public void widgetSelected(SelectionEvent event) {
-			if (event.detail == SWT.ARROW) {
-				ToolItem item = (ToolItem) event.widget;
-				Rectangle rect = item.getBounds();
-				Point pt = item.getParent().toDisplay(new Point(rect.x, rect.y));
-				menu.setLocation(pt.x, pt.y + rect.height);
-				menu.setVisible(true);
-			}
-		}
+	
+	@Override
+	public void createButtonsForButtonBar(Composite parent) {
+		// Override to remove default buttons
 	}
 }

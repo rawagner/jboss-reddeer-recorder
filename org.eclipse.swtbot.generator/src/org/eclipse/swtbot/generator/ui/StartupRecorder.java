@@ -26,7 +26,7 @@ import org.eclipse.ui.PlatformUI;
 
 public class StartupRecorder implements IStartup {
 
-	private static final String ENABLEMENT_PROPERTY = "org.eclipse.swtbot.generator.enable";
+	public static final String ENABLEMENT_PROPERTY = "org.eclipse.swtbot.generator.enable";
 
 	public void earlyStartup() {
 		if (Boolean.parseBoolean(System.getProperty(ENABLEMENT_PROPERTY)) != true) {

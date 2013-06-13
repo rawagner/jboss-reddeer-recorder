@@ -1,13 +1,8 @@
 package org.jboss.reddeer.eclipse.generator.framework.rules;
 
-import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.osgi.framework.adaptor.FilePath;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.generator.framework.AnnotationRule;

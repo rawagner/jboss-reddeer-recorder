@@ -32,7 +32,7 @@ public class GeneratorLaunchHandler extends AbstractHandler {
 		ILaunchConfiguration c=null;
 		
 		try {
-			wc = type.newInstance(null, "swtbotgenerator");
+			wc = type.newInstance(null, "botgenerator");
 			wc.setAttribute(IPDELauncherConstants.USE_PRODUCT, true); //we want to use a product, not application
 			wc.setAttribute(IPDELauncherConstants.PRODUCT, TargetPlatform.getDefaultProduct()); //get the default product
 			c=wc.doSave();
@@ -40,10 +40,7 @@ public class GeneratorLaunchHandler extends AbstractHandler {
 			e.printStackTrace();
 		}
 		
-		DebugUITools.openLaunchConfigurationDialog(
-			        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-			        c,
-			        "org.eclipse.debug.ui.launchGroup.run", null);
+		DebugUITools.openLaunchConfigurationDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),c,"org.eclipse.debug.ui.launchGroup.run", null);
 
 		return null;
 	}

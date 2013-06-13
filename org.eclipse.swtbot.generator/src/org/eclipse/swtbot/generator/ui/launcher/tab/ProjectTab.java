@@ -1,23 +1,17 @@
 package org.eclipse.swtbot.generator.ui.launcher.tab;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.pde.ui.launcher.AbstractLauncherTab;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swtbot.generator.ui.launcher.GeneratorLauncherConfiguration;
 
 public class ProjectTab extends AbstractLauncherTab{
 	
@@ -35,38 +29,10 @@ public class ProjectTab extends AbstractLauncherTab{
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		final Button projectNew = new Button(composite, SWT.RADIO);
-		projectNew.setText("Create new project from reddeer archetype");
+		projectNew.setText("Run with current Eclipse instance");
+		projectNew.setSelection(true);
 		final Button projectExisting = new Button(composite, SWT.RADIO);
-		projectExisting.setText("Choose existing project");
-		final Combo projectsCombo = new Combo(composite, SWT.DROP_DOWN);
-		
-		for(IProject project: ResourcesPlugin.getWorkspace().getRoot().getProjects()){
-			try {
-				if(project.isOpen() && project.isNatureEnabled(JavaCore.NATURE_ID)){
-					projectsCombo.add(project.getName());
-				}
-			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		projectsCombo.setEnabled(false);
-		
-		projectExisting.addSelectionListener(new SelectionAdapter() {
-			
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if(projectExisting.getSelection()){
-					projectsCombo.setEnabled(true);
-				} else{
-					projectsCombo.setEnabled(false);
-				}
-			}
-			
-		});
-		
-		final Button noProject = new Button(composite, SWT.RADIO);
-		noProject.setText("Just generate code");
+		projectExisting.setText("Run with new Eclipse instance");
 		
 		Dialog.applyDialogFont(composite);
 		composite.setSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
@@ -87,22 +53,19 @@ public class ProjectTab extends AbstractLauncherTab{
 	public void performApply(ILaunchConfigurationWorkingCopy arg0) {
 		Control[] controls = composite.getChildren();
 		if(((Button)controls[0]).getSelection()){
-			System.out.println("generate archetype");
+			arg0.setAttribute(GeneratorLauncherConfiguration.RUN_IN_NEW_INSTANCE, true);
 		} else if(((Button)controls[1]).getSelection()){
-			System.out.println("choosed project "+((Combo)controls[2]).getItem(((Combo)controls[2]).getSelectionIndex()));
+			arg0.setAttribute(GeneratorLauncherConfiguration.RUN_IN_NEW_INSTANCE, false);
 		}
 	}
 	
 	
 
 	public void setDefaults(ILaunchConfigurationWorkingCopy arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void validateTab() {
-		// TODO Auto-generated method stub
 		
 	}
 

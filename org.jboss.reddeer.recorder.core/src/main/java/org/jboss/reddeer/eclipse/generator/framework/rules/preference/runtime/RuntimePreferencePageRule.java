@@ -21,7 +21,7 @@ public class RuntimePreferencePageRule extends AbstractOpenPreferencePage{
 	@Override
 	public List<String> getActions() {
 		List<String> toReturn = new ArrayList<String>();
-		toReturn.add("RuntimePreferencePage() runtimePreferencePage = new RuntimePreferencePage()");
+		toReturn.add("RuntimePreferencePage runtimePreferencePage = new RuntimePreferencePage()");
 		toReturn.add("runtimePreferencePage.open()");
 		return toReturn;
 	}

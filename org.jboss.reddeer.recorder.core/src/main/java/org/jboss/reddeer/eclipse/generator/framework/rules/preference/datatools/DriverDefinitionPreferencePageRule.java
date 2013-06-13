@@ -21,7 +21,7 @@ public class DriverDefinitionPreferencePageRule extends AbstractOpenPreferencePa
 	@Override
 	public List<String> getActions() {
 		List<String> toReturn = new ArrayList<String>();
-		toReturn.add("DriverDefinitionPreferencePage() driverDefinitionPreferencePage = new DriverDefinitionPreferencePage()");
+		toReturn.add("DriverDefinitionPreferencePage driverDefinitionPreferencePage = new DriverDefinitionPreferencePage()");
 		toReturn.add("driverDefinitionPreferencePage.open()");
 		return toReturn;
 	}
