@@ -7,7 +7,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.generator.framework.GenerationSimpleRule;
-import org.eclipse.swtbot.generator.framework.WidgetUtils;
+import org.jboss.reddeer.swt.generator.framework.rules.RedDeerUtils;
 
 public class ShellRule extends GenerationSimpleRule{
 	
@@ -17,8 +17,8 @@ public class ShellRule extends GenerationSimpleRule{
 	@Override
 	public boolean appliesTo(Event event) {
 		if(event.widget instanceof Shell && event.type == SWT.Activate){
-			if(WidgetUtils.getWorkbench() != null){
-				return !WidgetUtils.getWorkbench().getText().equals(((Shell)event.widget).getText());
+			if(RedDeerUtils.getWorkbench() != null){
+				return !RedDeerUtils.getWorkbench().getText().equals(((Shell)event.widget).getText());
 			}
 			return true;
 		} 
@@ -40,6 +40,13 @@ public class ShellRule extends GenerationSimpleRule{
 			builder.append(".close()");
 		}
 		toReturn.add(builder.toString());
+		return toReturn;
+	}
+	
+	@Override
+	public List<String> getImports() {
+		List<String> toReturn = new ArrayList<String>();
+		toReturn.add("org.jboss.reddeer.swt.impl.shell.DefaultShell");
 		return toReturn;
 	}
 	
@@ -78,13 +85,6 @@ public class ShellRule extends GenerationSimpleRule{
 		} else if (!getShellTitle().equals(other.getShellTitle()))
 			return false;
 		return true;
-	}
-	
-	@Override
-	public List<String> getImports() {
-		List<String> toReturn = new ArrayList<String>();
-		toReturn.add("org.jboss.reddeer.swt.impl.shell.DefaultShell");
-		return toReturn;
 	}
 
 }

@@ -9,16 +9,15 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swtbot.generator.framework.GenerationSimpleRule;
 import org.eclipse.swtbot.generator.framework.WidgetUtils;
-import org.eclipse.ui.forms.widgets.Section;
-import org.jboss.reddeer.swt.generator.framework.rules.RuleUtils;
+import org.jboss.reddeer.swt.generator.framework.referencedComposite.ReferencedComposite;
+import org.jboss.reddeer.swt.generator.framework.rules.RedDeerUtils;
 
 public class TextRule extends GenerationSimpleRule{
 	
 	private String text;
-	private String group;
 	private int index;
 	private String label;
-	private String section;
+	private java.util.List<ReferencedComposite> composites;
 
 	@Override
 	public boolean appliesTo(Event event) {
@@ -34,41 +33,39 @@ public class TextRule extends GenerationSimpleRule{
 		if(s!=null){
 			setShellTitle(s.getText());
 		}
-		this.setGroup(WidgetUtils.getGroup((Text)event.widget));
 		this.setLabel(WidgetUtils.getLabel((Text)event.widget));
-		Section sec = WidgetUtils.getSection((Text)event.widget);
-		if(sec!=null){
-			setSection(sec.getText());
-		}
-		
-		
+		this.setComposites(RedDeerUtils.getComposites((Text)event.widget));	
 	}
 
 	@Override
 	public List<String> getActions() {
 		List<String> toReturn = new ArrayList<String>();
 		StringBuilder builder = new StringBuilder();
-		if(section!=null){
-			toReturn.add(RuleUtils.getSectionRule(section));
-		}
 		if(label != null){
-			builder.append("new LabeledText(\""+label+"\"");
-			if(group != null){
-				builder.append(",\""+group+"\"");
-			}
+			builder.append("new LabeledText(");
+			builder.append(RedDeerUtils.getReferencedCompositeString(composites));
+			builder.append("\"label\"");
 		} else {
 			builder.append("new DefaultText(");
-			if(group != null){
-				builder.append("\""+group+"\"");
-				if(index >0){
-					builder.append(","+index);
-				} 
-			} else if(group == null){
-				builder.append(index);
-			}
+			builder.append(RedDeerUtils.getReferencedCompositeString(composites));
+			builder.append(index);
 		}
 		builder.append(").setText(\""+text+"\")");
 		toReturn.add(builder.toString());
+		return toReturn;
+	}
+	
+	@Override
+	public List<String> getImports() {
+		List<String> toReturn = new ArrayList<String>();
+		if(label!=null){
+			toReturn.add("org.jboss.reddeer.swt.impl.text.LabeledText");
+		} else {
+			toReturn.add("org.jboss.reddeer.swt.impl.text.DefaultText");
+		}
+		for(ReferencedComposite r: composites){
+			toReturn.add(r.getImport());
+		}
 		return toReturn;
 	}
 	
@@ -78,14 +75,6 @@ public class TextRule extends GenerationSimpleRule{
 
 	public void setText(String text) {
 		this.text = text;
-	}
-
-	public String getGroup() {
-		return group;
-	}
-
-	public void setGroup(String group) {
-		this.group = group;
 	}
 
 	public int getIndex() {
@@ -104,15 +93,22 @@ public class TextRule extends GenerationSimpleRule{
 		this.label = label;
 	}
 
+	public java.util.List<ReferencedComposite> getComposites() {
+		return composites;
+	}
+
+	public void setComposites(java.util.List<ReferencedComposite> composites) {
+		this.composites = composites;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((group == null) ? 0 : group.hashCode());
+		result = prime * result
+				+ ((composites == null) ? 0 : composites.hashCode());
 		result = prime * result + index;
 		result = prime * result + ((label == null) ? 0 : label.hashCode());
-		result = prime * result
-				+ ((getShellTitle() == null) ? 0 : getShellTitle().hashCode());
 		return result;
 	}
 
@@ -125,10 +121,10 @@ public class TextRule extends GenerationSimpleRule{
 		if (getClass() != obj.getClass())
 			return false;
 		TextRule other = (TextRule) obj;
-		if (group == null) {
-			if (other.group != null)
+		if (composites == null) {
+			if (other.composites != null)
 				return false;
-		} else if (!group.equals(other.group))
+		} else if (!composites.equals(other.composites))
 			return false;
 		if (index != other.index)
 			return false;
@@ -137,36 +133,11 @@ public class TextRule extends GenerationSimpleRule{
 				return false;
 		} else if (!label.equals(other.label))
 			return false;
-		if (getShellTitle() == null) {
-			if (other.getShellTitle() != null)
-				return false;
-		} else if (!getShellTitle().equals(other.getShellTitle()))
-			return false;
 		return true;
 	}
 	
-	@Override
-	public List<String> getImports() {
-		List<String> toReturn = new ArrayList<String>();
-		if(label!=null){
-			toReturn.add("org.jboss.reddeer.swt.impl.text.LabeledText");
-		} else {
-			toReturn.add("org.jboss.reddeer.swt.impl.text.DefaultText");
-		}
-		if(section != null){
-			toReturn.add(RuleUtils.SECTION_IMPORT);
-		}
-		return toReturn;
-	}
-
-	public String getSection() {
-		return section;
-	}
-
-	public void setSection(String section) {
-		this.section = section;
-	}
 	
-	
+
+
 
 }

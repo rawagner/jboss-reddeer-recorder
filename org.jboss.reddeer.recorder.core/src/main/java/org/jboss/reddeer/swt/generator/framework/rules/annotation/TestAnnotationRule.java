@@ -1,4 +1,4 @@
-package org.jboss.reddeer.eclipse.generator.framework.rules.annotation;
+package org.jboss.reddeer.swt.generator.framework.rules.annotation;
 
 import org.eclipse.swtbot.generator.framework.AnnotationRule;
 

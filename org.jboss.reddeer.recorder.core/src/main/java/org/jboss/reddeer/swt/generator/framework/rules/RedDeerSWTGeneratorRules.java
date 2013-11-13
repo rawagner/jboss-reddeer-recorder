@@ -9,12 +9,13 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.generator.framework.AnnotationRule;
 import org.eclipse.swtbot.generator.framework.GenerationComplexRule;
 import org.eclipse.swtbot.generator.framework.GenerationSimpleRule;
-import org.eclipse.swtbot.generator.framework.GenerationStackRule;
 import org.eclipse.swtbot.generator.framework.Generator;
-import org.jboss.reddeer.eclipse.generator.framework.rules.annotation.CleanWorkspaceAnnotationRule;
-import org.jboss.reddeer.eclipse.generator.framework.rules.annotation.TestAnnotationRule;
+import org.jboss.reddeer.swt.generator.framework.rules.annotation.CleanWorkspaceAnnotationRule;
+import org.jboss.reddeer.swt.generator.framework.rules.annotation.TestAnnotationRule;
+import org.jboss.reddeer.swt.generator.framework.rules.complex.CTabWorkbenchFilterComplexRule;
 import org.jboss.reddeer.swt.generator.framework.rules.complex.CheckBoxFilterComplexRule;
 import org.jboss.reddeer.swt.generator.framework.rules.complex.ComboComplexRule;
+import org.jboss.reddeer.swt.generator.framework.rules.complex.ListFilterComplexRule;
 import org.jboss.reddeer.swt.generator.framework.rules.complex.TextComplexRule;
 import org.jboss.reddeer.swt.generator.framework.rules.complex.ToolBarMenuComplexRule;
 import org.jboss.reddeer.swt.generator.framework.rules.complex.TreeFilterComplexRule;
@@ -23,6 +24,7 @@ import org.jboss.reddeer.swt.generator.framework.rules.simple.CTabWorkbenchRule;
 import org.jboss.reddeer.swt.generator.framework.rules.simple.ComboRule;
 import org.jboss.reddeer.swt.generator.framework.rules.simple.ContextMenuRule;
 import org.jboss.reddeer.swt.generator.framework.rules.simple.HyperlinkRule;
+import org.jboss.reddeer.swt.generator.framework.rules.simple.LinkRule;
 import org.jboss.reddeer.swt.generator.framework.rules.simple.ListRule;
 import org.jboss.reddeer.swt.generator.framework.rules.simple.ShellMenuRule;
 import org.jboss.reddeer.swt.generator.framework.rules.simple.ShellRule;
@@ -49,6 +51,7 @@ public class RedDeerSWTGeneratorRules implements Generator{
 		res.add(new CTabWorkbenchRule());
 		res.add(new ListRule());
 		res.add(new HyperlinkRule());
+		res.add(new LinkRule());
 		return res;
 	}
 
@@ -64,15 +67,17 @@ public class RedDeerSWTGeneratorRules implements Generator{
 		res.add(new TextComplexRule());
 		res.add(new TreeFilterComplexRule());
 		res.add(new CheckBoxFilterComplexRule());
+		res.add(new ListFilterComplexRule());
+		res.add(new CTabWorkbenchFilterComplexRule());
 		return res;
 	}
-
+/*
 	@Override
 	public List<GenerationStackRule> createStackRules() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+*/
 	@Override
 	public List<AnnotationRule> createAnnotationRules() {
 		List<AnnotationRule> annotations = new ArrayList<AnnotationRule>();
@@ -81,10 +86,10 @@ public class RedDeerSWTGeneratorRules implements Generator{
 		return annotations;
 	}
 
-	@Override
 	public Image getImage() {
 		InputStream is = getClass().getResourceAsStream("/icons/reddeer_logo.png");
 		Image image = new Image(Display.getCurrent(), is);
 		return image;
 	}
+	
 }

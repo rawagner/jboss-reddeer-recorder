@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.eclipse.swtbot.generator.framework.GenerationComplexRule;
 import org.eclipse.swtbot.generator.framework.GenerationSimpleRule;
-import org.jboss.reddeer.swt.generator.framework.rules.RuleUtils;
 import org.jboss.reddeer.swt.generator.framework.rules.simple.ContextMenuRule;
 import org.jboss.reddeer.swt.generator.framework.rules.simple.ToolBarRule;
 
@@ -27,7 +26,6 @@ public class ToolBarMenuComplexRule extends GenerationComplexRule{
 	public List<String> getActions(){
 		String parent = ((ToolBarRule)getInitializationRules().get(0)).getToolTipText();
 		List<String> toReturn = new ArrayList<String>();
-		toReturn.add(RuleUtils.getSectionRule(((ToolBarRule)getInitializationRules().get(0)).getSection()));
 		StringBuilder builder = new StringBuilder();
 		builder.append("new ToolbarMenu(");
 		builder.append("\""+parent+"\"");
@@ -92,8 +90,7 @@ public class ToolBarMenuComplexRule extends GenerationComplexRule{
 	@Override
 	public List<String> getImports() {
 		List<String> toReturn = new ArrayList<String>();
-		toReturn.add("org.jboss.reddeer.swt.impl.menu.ShellMenu");
-		toReturn.add(RuleUtils.SECTION_IMPORT);
+		toReturn.add("org.jboss.reddeer.swt.impl.menu.ToolbarMenu");
 		return toReturn;
 	}
 

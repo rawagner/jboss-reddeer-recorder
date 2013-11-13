@@ -9,8 +9,8 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.generator.framework.GenerationSimpleRule;
 import org.eclipse.swtbot.generator.framework.WidgetUtils;
-import org.eclipse.ui.forms.widgets.Section;
-import org.jboss.reddeer.swt.generator.framework.rules.RuleUtils;
+import org.jboss.reddeer.swt.generator.framework.referencedComposite.ReferencedComposite;
+import org.jboss.reddeer.swt.generator.framework.rules.RedDeerUtils;
 
 public class ComboRule extends GenerationSimpleRule{
 
@@ -18,8 +18,7 @@ public class ComboRule extends GenerationSimpleRule{
 	private String label;
 	private int index;
 	private int selection;
-	private String group;
-	private String section;
+	private List<ReferencedComposite> composites;
 	
 	@Override
 	public boolean appliesTo(Event event) {
@@ -33,14 +32,10 @@ public class ComboRule extends GenerationSimpleRule{
 		this.setLabel(WidgetUtils.getLabel(c));
 		this.setIndex(WidgetUtils.getIndex(c));
 		this.setSelection(c.getSelectionIndex());
-		this.setGroup(WidgetUtils.getGroup(c));
+		this.setComposites(RedDeerUtils.getComposites(c));
 		Shell s = WidgetUtils.getShell((Combo)event.widget);
 		if(s!=null){
 			setShellTitle(s.getText());
-		}
-		Section sec = WidgetUtils.getSection((Combo)event.widget);
-		if(sec!=null){
-			setSection(sec.getText());
 		}
 	}
 
@@ -48,19 +43,11 @@ public class ComboRule extends GenerationSimpleRule{
 	public List<String> getActions() {
 		StringBuilder builder = new StringBuilder();
 		List<String> toReturn = new ArrayList<String>();
-		if(section!=null){
-			toReturn.add(RuleUtils.getSectionRule(section));
-		}
 		builder.append("new DefaultCombo(");
-		if(group != null){
-			builder.append("\""+group+"\"");
-		}
+		builder.append(RedDeerUtils.getReferencedCompositeString(composites));
 		if(label != null){
-			if(group != null){
-				builder.append(",");
-			}
 			builder.append("\""+label+"\"");
-		} else if(index > 0){
+		} else {
 			builder.append(index);
 		}
 		builder.append(")");
@@ -73,6 +60,16 @@ public class ComboRule extends GenerationSimpleRule{
 		toReturn.add(builder.toString());
 		return toReturn;
 		
+	}
+	
+	@Override
+	public List<String> getImports() {
+		List<String> toReturn = new ArrayList<String>();
+		toReturn.add("org.jboss.reddeer.swt.impl.combo.DefaultCombo");
+		for(ReferencedComposite r: composites){
+			toReturn.add(r.getImport());
+		}
+		return toReturn;
 	}
 
 	public String getText() {
@@ -107,23 +104,22 @@ public class ComboRule extends GenerationSimpleRule{
 		this.selection = selection;
 	}
 
-	public String getGroup() {
-		return group;
+	public List<ReferencedComposite> getComposites() {
+		return composites;
 	}
 
-	public void setGroup(String group) {
-		this.group = group;
+	public void setComposites(List<ReferencedComposite> composites) {
+		this.composites = composites;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((group == null) ? 0 : group.hashCode());
+		result = prime * result
+				+ ((composites == null) ? 0 : composites.hashCode());
 		result = prime * result + index;
 		result = prime * result + ((label == null) ? 0 : label.hashCode());
-		result = prime * result
-				+ ((getShellTitle() == null) ? 0 : getShellTitle().hashCode());
 		return result;
 	}
 
@@ -136,10 +132,10 @@ public class ComboRule extends GenerationSimpleRule{
 		if (getClass() != obj.getClass())
 			return false;
 		ComboRule other = (ComboRule) obj;
-		if (group == null) {
-			if (other.group != null)
+		if (composites == null) {
+			if (other.composites != null)
 				return false;
-		} else if (!group.equals(other.group))
+		} else if (!composites.equals(other.composites))
 			return false;
 		if (index != other.index)
 			return false;
@@ -148,32 +144,8 @@ public class ComboRule extends GenerationSimpleRule{
 				return false;
 		} else if (!label.equals(other.label))
 			return false;
-		if (getShellTitle() == null) {
-			if (other.getShellTitle() != null)
-				return false;
-		} else if (!getShellTitle().equals(other.getShellTitle()))
-			return false;
 		return true;
 	}
-
-	@Override
-	public List<String> getImports() {
-		List<String> toReturn = new ArrayList<String>();
-		toReturn.add("org.jboss.reddeer.swt.impl.combo.DefaultCombo");
-		if(section != null){
-			toReturn.add(RuleUtils.SECTION_IMPORT);
-		}
-		return toReturn;
-	}
-
-	public String getSection() {
-		return section;
-	}
-
-	public void setSection(String section) {
-		this.section = section;
-	}
 	
 	
-
 }

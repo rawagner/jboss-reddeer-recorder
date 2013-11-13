@@ -11,14 +11,6 @@ import org.eclipse.swtbot.generator.framework.GenerationSimpleRule;
 public class TabRule extends GenerationSimpleRule{
 	
 	private String text;
-	
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-	}
 
 	@Override
 	public boolean appliesTo(Event event) {
@@ -37,6 +29,21 @@ public class TabRule extends GenerationSimpleRule{
 		toReturn.add("new DefaultTabItem(\"" + text + "\").activate()");
 		return toReturn;
 		
+	}
+	
+	@Override
+	public List<String> getImports() {
+		List<String> toReturn = new ArrayList<String>();
+		toReturn.add("org.jboss.reddeer.swt.impl.tab.DefaultTabItem");
+		return toReturn;
+	}
+	
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
 	}
 
 	@Override
@@ -62,13 +69,6 @@ public class TabRule extends GenerationSimpleRule{
 		} else if (!text.equals(other.text))
 			return false;
 		return true;
-	}
-
-	@Override
-	public List<String> getImports() {
-		List<String> toReturn = new ArrayList<String>();
-		toReturn.add("org.jboss.reddeer.swt.impl.tab.DefaultTabItem");
-		return toReturn;
 	}
 
 }

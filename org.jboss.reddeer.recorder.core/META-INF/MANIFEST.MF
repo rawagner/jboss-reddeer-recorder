@@ -5,9 +5,12 @@ Bundle-SymbolicName: org.jboss.reddeer.recorder.core;singleton:=true
 Bundle-Version: 0.0.1.qualifier
 Bundle-Activator: org.jboss.reddeer.recorder.core.Activator
 Require-Bundle: org.eclipse.ui,
- org.eclipse.ui.forms,
- org.eclipse.wst.common.project.facet.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.ui.forms;resolution:=optional,
  org.eclipse.swt,
  org.eclipse.swtbot.generator
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: org.jboss.reddeer.swt.generator.framework.rules,
+ org.jboss.reddeer.swt.generator.framework.rules.complex,
+ org.jboss.reddeer.swt.generator.framework.rules.simple

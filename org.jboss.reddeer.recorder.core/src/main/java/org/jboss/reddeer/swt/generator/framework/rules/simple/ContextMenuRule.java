@@ -61,6 +61,29 @@ public class ContextMenuRule extends GenerationSimpleRule{
 	}
 
 	@Override
+	public List<String> getImports() {
+		List<String> toReturn = new ArrayList<String>();
+		toReturn.add("org.jboss.reddeer.swt.impl.menu.ContextMenu");
+		return toReturn;
+	}
+	
+	public List<String> getPath() {
+		return path;
+	}
+
+	public void setPath(List<String> path) {
+		this.path = path;
+	}
+
+	public String getMenu() {
+		return menu;
+	}
+
+	public void setMenu(String menu) {
+		this.menu = menu;
+	}
+	
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -90,30 +113,4 @@ public class ContextMenuRule extends GenerationSimpleRule{
 			return false;
 		return true;
 	}
-
-	public List<String> getPath() {
-		return path;
-	}
-
-	public void setPath(List<String> path) {
-		this.path = path;
-	}
-
-	public String getMenu() {
-		return menu;
-	}
-
-	public void setMenu(String menu) {
-		this.menu = menu;
-	}
-	
-	@Override
-	public List<String> getImports() {
-		List<String> toReturn = new ArrayList<String>();
-		toReturn.add("org.jboss.reddeer.swt.impl.menu.ContextMenu");
-		return toReturn;
-	}
-	
-	
-
 }

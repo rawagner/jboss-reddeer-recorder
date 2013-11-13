@@ -10,8 +10,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swtbot.generator.framework.GenerationSimpleRule;
 import org.eclipse.swtbot.generator.framework.WidgetUtils;
-import org.eclipse.ui.forms.widgets.Section;
-import org.jboss.reddeer.swt.generator.framework.rules.RuleUtils;
+import org.jboss.reddeer.swt.generator.framework.rules.RedDeerUtils;
 
 public class ToolBarRule extends GenerationSimpleRule{
 	
@@ -20,7 +19,6 @@ public class ToolBarRule extends GenerationSimpleRule{
 	public static final int VIEW=2;
 	public static final int SHELL=3;
 	private int type;
-	private String section;
 	
 
 	@Override
@@ -35,8 +33,8 @@ public class ToolBarRule extends GenerationSimpleRule{
 		if(s!=null){
 			setShellTitle(s.getText());
 		}
-		CTabItem v = WidgetUtils.getView(((ToolItem)event.widget).getParent());
-		Shell workbench = WidgetUtils.getWorkbench();
+		CTabItem v = RedDeerUtils.getView(((ToolItem)event.widget).getParent());
+		Shell workbench = RedDeerUtils.getWorkbench();
 		if(v!=null){
 			setViewTitle(v.getText());
 		}
@@ -47,19 +45,12 @@ public class ToolBarRule extends GenerationSimpleRule{
 		} else {
 			type=WORKBENCH;
 		}
-		Section sec = WidgetUtils.getSection(((ToolItem)event.widget).getParent());
-		if(sec!=null){
-			setSection(sec.getText());
-		}
 	}
 
 	@Override
 	public List<String> getActions() {
 		List<String> toReturn = new ArrayList<String>();
 		StringBuilder builder = new StringBuilder();
-		if(section!=null){
-			toReturn.add(RuleUtils.getSectionRule(section));
-		}
 		if(type==WORKBENCH){
 			builder.append("new WorkbenchToolItem(");
 		} else if (type==VIEW){
@@ -71,6 +62,19 @@ public class ToolBarRule extends GenerationSimpleRule{
 		toReturn.add(builder.toString());
 		return toReturn;
 		
+	}
+	
+	@Override
+	public List<String> getImports() {
+		List<String> toReturn = new ArrayList<String>();
+		if(type==WORKBENCH){
+			toReturn.add("org.jboss.reddeer.swt.impl.toolbar.WorkbenchToolItem");
+		} else if (type==VIEW){
+			toReturn.add("org.jboss.reddeer.swt.impl.toolbar.ViewToolItem");
+		} else if(type==SHELL){
+			toReturn.add("org.jboss.reddeer.swt.impl.toolbar.ShellToolItem");
+		}
+		return toReturn;
 	}
 
 	public String getToolTipText() {
@@ -88,59 +92,5 @@ public class ToolBarRule extends GenerationSimpleRule{
 	public void setType(int type) {
 		this.type = type;
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((toolTipText == null) ? 0 : toolTipText.hashCode());
-		result = prime * result + type;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ToolBarRule other = (ToolBarRule) obj;
-		if (toolTipText == null) {
-			if (other.toolTipText != null)
-				return false;
-		} else if (!toolTipText.equals(other.toolTipText))
-			return false;
-		if (type != other.type)
-			return false;
-		return true;
-	}
-	
-	@Override
-	public List<String> getImports() {
-		List<String> toReturn = new ArrayList<String>();
-		if(type==WORKBENCH){
-			toReturn.add("org.jboss.reddeer.swt.impl.toolbar.WorkbenchToolItem");
-		} else if (type==VIEW){
-			toReturn.add("org.jboss.reddeer.swt.impl.toolbar.ViewToolItem");
-		} else if(type==SHELL){
-			toReturn.add("org.jboss.reddeer.swt.impl.toolbar.ShellToolItem");
-		}
-		if(section != null){
-			toReturn.add(RuleUtils.SECTION_IMPORT);
-		}
-		return toReturn;
-	}
-
-	public String getSection() {
-		return section;
-	}
-
-	public void setSection(String section) {
-		this.section = section;
-	}
-	
 	
 }

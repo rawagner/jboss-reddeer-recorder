@@ -16,22 +16,6 @@ public class ShellMenuRule extends GenerationSimpleRule{
 	private List<String> path;
 	private String menu;
 
-	public List<String> getPath() {
-		return path;
-	}
-
-	public void setPath(List<String> path) {
-		this.path = path;
-	}
-
-	public String getMenu() {
-		return menu;
-	}
-
-	public void setMenu(String menu) {
-		this.menu = menu;
-	}
-
 	@Override
 	public boolean appliesTo(Event event) {
 		boolean menu = event.widget instanceof MenuItem;
@@ -75,8 +59,29 @@ public class ShellMenuRule extends GenerationSimpleRule{
 		toReturn.add(code.toString());
 		return toReturn;
 	}
-
 	
+	@Override
+	public List<String> getImports() {
+		List<String> toReturn = new ArrayList<String>();
+		toReturn.add("org.jboss.reddeer.swt.impl.menu.ShellMenu");
+		return toReturn;
+	}
+
+	public List<String> getPath() {
+		return path;
+	}
+
+	public void setPath(List<String> path) {
+		this.path = path;
+	}
+
+	public String getMenu() {
+		return menu;
+	}
+
+	public void setMenu(String menu) {
+		this.menu = menu;
+	}
 	
 	@Override
 	public int hashCode() {
@@ -108,13 +113,4 @@ public class ShellMenuRule extends GenerationSimpleRule{
 			return false;
 		return true;
 	}
-
-	@Override
-	public List<String> getImports() {
-		List<String> toReturn = new ArrayList<String>();
-		toReturn.add("org.jboss.reddeer.swt.impl.menu.ShellMenu");
-		return toReturn;
-	}
-	
-
 }

@@ -88,7 +88,6 @@
     </pluginManagement>
   </build>  
   <modules>
-    <module>org.eclipse.swtbot.generator</module>
     <module>org.jboss.reddeer.recorder.core</module>
     <module>org.jboss.reddeer.recorder.feature</module>
     <module>org.jboss.reddeer.recorder.site</module>

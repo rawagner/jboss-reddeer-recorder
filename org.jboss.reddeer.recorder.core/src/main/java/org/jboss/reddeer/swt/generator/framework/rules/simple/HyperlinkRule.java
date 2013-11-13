@@ -8,52 +8,49 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swtbot.generator.framework.GenerationSimpleRule;
 import org.eclipse.swtbot.generator.framework.WidgetUtils;
 import org.eclipse.ui.forms.widgets.Hyperlink;
-import org.eclipse.ui.forms.widgets.Section;
-import org.jboss.reddeer.swt.generator.framework.rules.RuleUtils;
+import org.eclipse.ui.forms.widgets.ImageHyperlink;
+import org.jboss.reddeer.swt.generator.framework.referencedComposite.ReferencedComposite;
+import org.jboss.reddeer.swt.generator.framework.rules.RedDeerUtils;
 
 public class HyperlinkRule extends GenerationSimpleRule{
 	
 	private String text;
 	private int index;
-	private String section;
+	private List<ReferencedComposite> composites;
 
 	@Override
 	public boolean appliesTo(Event event) {
-		return event.widget instanceof Hyperlink && event.type == SWT.MouseDown;
+		return (event.widget instanceof Hyperlink || event.widget instanceof ImageHyperlink) && event.type == SWT.MouseDown;
 	}
 
 	@Override
 	public void initializeForEvent(Event event) {
-		setText(((Hyperlink)event.widget).getText());
-		setIndex(WidgetUtils.getIndex((Hyperlink)event.widget));
-		Section s = WidgetUtils.getSection((Hyperlink)event.widget);
-		if(s!=null){
-			setSection(s.getText());
-		}
+		this.text = ((Hyperlink)event.widget).getText();
+		this.index = WidgetUtils.getIndex((Hyperlink)event.widget);
+		this.composites = RedDeerUtils.getComposites((Hyperlink)event.widget);
 	}
 
 	@Override
 	public List<String> getActions() {
 		List<String> toReturn = new ArrayList<String>();
-		if(section != null){
-			toReturn.add(RuleUtils.getSectionRule(section));
-		}
-		toReturn.add("hyperlink "+text);
+		StringBuilder builder = new StringBuilder();
+		builder.append("new UIFormHyperlink(");
+		builder.append(RedDeerUtils.getReferencedCompositeString(composites));
+		builder.append("\""+text+"\")");
+		toReturn.add(builder.toString());
 		return toReturn;
 	}
-
+	
 	@Override
-	public int hashCode() {
-		// TODO Auto-generated method stub
-		return 0;
+	public List<String> getImports() {
+		List<String> toReturn = new ArrayList<String>();
+		toReturn.add("org.jboss.reddeer.uiforms.hyperlink.UIFormHyperlink");
+		for(ReferencedComposite r: composites){
+			toReturn.add(r.getImport());
+		}
+		return toReturn;
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
+	
 	public String getText() {
 		return text;
 	}
@@ -70,22 +67,41 @@ public class HyperlinkRule extends GenerationSimpleRule{
 		this.index = index;
 	}
 
-	public String getSection() {
-		return section;
-	}
-
-	public void setSection(String section) {
-		this.section = section;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((composites == null) ? 0 : composites.hashCode());
+		result = prime * result + index;
+		result = prime * result + ((text == null) ? 0 : text.hashCode());
+		return result;
 	}
 
 	@Override
-	public List<String> getImports() {
-		List<String> toReturn = new ArrayList<String>();
-		toReturn.add("hyperlink_Import");
-		if(section != null){
-			toReturn.add(RuleUtils.SECTION_IMPORT);
-		}
-		return toReturn;
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		HyperlinkRule other = (HyperlinkRule) obj;
+		if (composites == null) {
+			if (other.composites != null)
+				return false;
+		} else if (!composites.equals(other.composites))
+			return false;
+		if (index != other.index)
+			return false;
+		if (text == null) {
+			if (other.text != null)
+				return false;
+		} else if (!text.equals(other.text))
+			return false;
+		return true;
 	}
+	
+	
 
 }
